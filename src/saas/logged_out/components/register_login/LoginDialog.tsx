@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useRef, Fragment } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames";
-import { withRouter } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -9,13 +7,21 @@ import {
   Typography,
   FormControlLabel,
   withStyles,
+  Theme,
 } from "@material-ui/core";
 import FormDialog from "../../../shared/components/FormDialog";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
 import ButtonCircularProgress from "../../../shared/components/ButtonCircularProgress";
 import VisibilityPasswordTextField from "../../../shared/components/VisibilityPasswordTextField";
+import { connect } from 'react-redux'
+import { loginRequest } from "../../../../state/ducks/auth"
+import { RootState } from "../../../../state/root"
+import { createSelector } from "@reduxjs/toolkit";
 
-const styles = (theme) => ({
+
+
+
+const styles = (theme: Theme) => ({
   forgotPassword: {
     marginTop: theme.spacing(2),
     color: theme.palette.primary.main,
@@ -36,47 +42,46 @@ const styles = (theme) => ({
   },
 });
 
-function LoginDialog(props) {
+interface IProps {
+  classes: any,
+  isLoading: boolean,
+  loginRequest: (credentials: {username: string, password: string}) => void,
+  onClose: () => void,
+  openChangePasswordDialog: () => void,
+  setStatus: (value: React.SetStateAction<null>) => void,
+  status: string,
+}
+
+
+const LoginDialog = (props: IProps) => {
   const {
-    setStatus,
-    history,
     classes,
+    isLoading,
+    loginRequest,
     onClose,
     openChangePasswordDialog,
+    setStatus,
     status,
   } = props;
-  const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const loginEmail = useRef();
-  const loginPassword = useRef();
+  const loginEmail = useRef<HTMLDivElement>(null);
+  const loginPassword = useRef<HTMLDivElement>(null);
 
   const login = useCallback(() => {
-    setIsLoading(true);
-    setStatus(null);
-    if (loginEmail.current.value !== "test@web.com") {
-      setTimeout(() => {
-        setStatus("invalidEmail");
-        setIsLoading(false);
-      }, 1500);
-    } else if (loginPassword.current.value !== "test") {
-      setTimeout(() => {
-        setStatus("invalidPassword");
-        setIsLoading(false);
-      }, 1500);
-    } else {
-      setTimeout(() => {
-        history.push("/c/dashboard");
-      }, 150);
+    if (loginEmail && loginEmail.current && loginPassword && loginPassword.current) {
+      loginRequest({
+        username: (loginEmail.current as HTMLInputElement).value,
+        password: (loginPassword.current as HTMLInputElement).value
+      })
     }
-  }, [setIsLoading, loginEmail, loginPassword, history, setStatus]);
-
+  }, [loginEmail, loginPassword, loginRequest]);
   return (
     <Fragment>
       <FormDialog
         open
         onClose={onClose}
         loading={isLoading}
-        onFormSubmit={(e) => {
+        onFormSubmit={(e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
           login();
         }}
@@ -121,13 +126,11 @@ function LoginDialog(props) {
                 }
               }}
               helperText={
-                status === "invalidPassword" ? (
+                status === "invalidPassword" && (
                   <span>
                     Incorrect password. Try again, or click on{" "}
                     <b>&quot;Forgot Password?&quot;</b> to reset it.
                   </span>
-                ) : (
-                  ""
                 )
               }
               FormHelperTextProps={{ error: true }}
@@ -139,16 +142,10 @@ function LoginDialog(props) {
               control={<Checkbox color="primary" />}
               label={<Typography variant="body1">Remember me</Typography>}
             />
-            {status === "verificationEmailSend" ? (
+            {status === "verificationEmailSend" && (
               <HighlightedInformation>
                 We have send instructions on how to reset your password to your
                 email address
-              </HighlightedInformation>
-            ) : (
-              <HighlightedInformation>
-                Email is: <b>test@web.com</b>
-                <br />
-                Password is: <b>test</b>
               </HighlightedInformation>
             )}
           </Fragment>
@@ -173,7 +170,7 @@ function LoginDialog(props) {
                 isLoading ? classes.disabledText : null
               )}
               color="primary"
-              onClick={isLoading ? null : openChangePasswordDialog}
+              onClick={() => !isLoading && openChangePasswordDialog()}
               tabIndex={0}
               role="button"
               onKeyDown={(event) => {
@@ -195,13 +192,13 @@ function LoginDialog(props) {
   );
 }
 
-LoginDialog.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
-  setStatus: PropTypes.func.isRequired,
-  openChangePasswordDialog: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
-  status: PropTypes.string,
-};
+const isLoadingSelector = (state: RootState) => state.authReducer.isLoading
+const getIsLoading = createSelector(
+  isLoadingSelector, 
+  (isLoading) => isLoading
+)
 
-export default withRouter(withStyles(styles)(LoginDialog));
+const mapStateToProps = (state: RootState) => ({ isLoading: getIsLoading(state)  })
+const mapDispatchToProps = { loginRequest }
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(LoginDialog));
