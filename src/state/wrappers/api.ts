@@ -8,21 +8,17 @@ const instance = Axios.create({
   baseURL: process.env.REACT_APP_BASE_URL
 })
 
-
-
 interface APIParameters {
   url: string,
   method: Method,
   errorAction: (data: object) => {[Key: string]: string},
   successAction: (data: object) => any,
   data?: FormData,
-  headers?: HeadersInit,
-
+  headers?: HeadersInit
 }
 
 export const apiClient = ({url, method, errorAction, successAction, data, headers}: APIParameters
 ) => {
-  // instance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   return from(instance.request({
     data,
     headers,

@@ -36,7 +36,7 @@ export const authSlice = createSlice({
         loginRequest: (state, action) => ({ ...state, isLoading: true }),
         loginSuccess: (state, action) => ({
             ...state,
-            auth: action.payload,
+            auth: action.payload.data,
             profile: action.payload.profile,
             isLoading: false,
             isAuthenticated: true
@@ -56,7 +56,7 @@ export const authReducer = authSlice.reducer
 
 export const logoutEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
     filter(authSlice.actions.logoutRequest.match),
-    mapTo(authSlice.actions.logoutSuccess(null))
+    mapTo(authSlice.actions.logoutSuccess)
 )
 
 export const loginEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
@@ -74,4 +74,4 @@ export const loginEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer
             successAction: authSlice.actions.loginSuccess,
         })
     })
-);
+)
