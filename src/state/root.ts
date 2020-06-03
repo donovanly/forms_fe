@@ -1,16 +1,17 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import { combineEpics } from 'redux-observable'
-import { authReducer, authEpic } from './ducks/auth'
+import { authReducer, loginEpic, logoutEpic } from './ducks/auth'
 import { counterReducer, countEpic } from './ducks/ducks'
 
 export const rootEpic = combineEpics<any>(
-    authEpic,
-    countEpic
+    countEpic,
+    loginEpic,
+    logoutEpic,
 )
 
 export const reducer = combineReducers({
     authReducer,
-    counterReducer
+    counterReducer,
 })
 
 export type RootState = ReturnType<typeof reducer>

@@ -13,13 +13,17 @@ import FormDialog from "../../../shared/components/FormDialog";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
 import ButtonCircularProgress from "../../../shared/components/ButtonCircularProgress";
 import VisibilityPasswordTextField from "../../../shared/components/VisibilityPasswordTextField";
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginRequest } from "../../../../state/ducks/auth"
 import { RootState } from "../../../../state/root"
-import { createSelector } from "@reduxjs/toolkit";
 
-
-
+interface IProps {
+  classes: any,
+  onClose: () => void,
+  openChangePasswordDialog: () => void,
+  setStatus: (value: React.SetStateAction<null>) => void,
+  status: string,
+}
 
 const styles = (theme: Theme) => ({
   forgotPassword: {
@@ -42,39 +46,30 @@ const styles = (theme: Theme) => ({
   },
 });
 
-interface IProps {
-  classes: any,
-  isLoading: boolean,
-  loginRequest: (credentials: {username: string, password: string}) => void,
-  onClose: () => void,
-  openChangePasswordDialog: () => void,
-  setStatus: (value: React.SetStateAction<null>) => void,
-  status: string,
-}
-
-
 const LoginDialog = (props: IProps) => {
   const {
     classes,
-    isLoading,
-    loginRequest,
     onClose,
     openChangePasswordDialog,
     setStatus,
     status,
   } = props;
+  const isLoading = useSelector((state: RootState) => state.authReducer.isLoading)
+  const dispatch = useDispatch()
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const loginEmail = useRef<HTMLDivElement>(null);
   const loginPassword = useRef<HTMLDivElement>(null);
 
   const login = useCallback(() => {
     if (loginEmail && loginEmail.current && loginPassword && loginPassword.current) {
-      loginRequest({
+      dispatch(loginRequest({
         username: (loginEmail.current as HTMLInputElement).value,
         password: (loginPassword.current as HTMLInputElement).value
-      })
+      }))
     }
-  }, [loginEmail, loginPassword, loginRequest]);
+  }, [loginEmail, loginPassword, dispatch]);
+
   return (
     <Fragment>
       <FormDialog
@@ -192,13 +187,4 @@ const LoginDialog = (props: IProps) => {
   );
 }
 
-const isLoadingSelector = (state: RootState) => state.authReducer.isLoading
-const getIsLoading = createSelector(
-  isLoadingSelector, 
-  (isLoading) => isLoading
-)
-
-const mapStateToProps = (state: RootState) => ({ isLoading: getIsLoading(state)  })
-const mapDispatchToProps = { loginRequest }
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(LoginDialog));
+export default withStyles(styles)(LoginDialog);

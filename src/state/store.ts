@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware, AnyAction } from '@reduxjs/toolkit'
+import { AnyAction, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { rootEpic, reducer, RootState } from './root'
 import { createEpicMiddleware } from 'redux-observable'
 

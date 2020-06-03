@@ -3,7 +3,8 @@ import {
     createSlice,
 } from "@reduxjs/toolkit"
 import { Epic } from "redux-observable";
-import { filter, mergeMap  } from "rxjs/operators";
+import { filter, mapTo, mergeMap  } from "rxjs/operators";
+import { apiClient } from '../wrappers/api'
 
 interface Auth {
     access_token: string,
@@ -21,54 +22,56 @@ interface Profile {
     email: string
 }
 
+const initialState = {
+    auth: {} as Auth,
+    profile: {} as Profile,
+    isLoading: false,
+    isAuthenticated: false
+}
+
 export const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        auth: {} as Auth,
-        profile: {} as Profile,
-        isLoading: false
-    },
+    initialState,
     reducers: {
-        loginRequest: (state, _) => ({ ...state, isLoading: true }),
+        loginRequest: (state, action) => ({ ...state, isLoading: true }),
         loginSuccess: (state, action) => ({
             ...state,
             auth: action.payload,
             profile: action.payload.profile,
-            isLoading: false
+            isLoading: false,
+            isAuthenticated: true
         }),
-        loginFailure: (state) => ({
+        loginFailure: (state, action) => ({
             ...state,
-            isLoading: false
-        })
+            isLoading: false,
+            isAuthenticated: false
+        }),
+        logoutRequest: (state, action) => ({ ...state, isLoading: true }),
+        logoutSuccess: (state, action) => initialState
     }
 });
 
-export const { loginRequest } = authSlice.actions
+export const { loginRequest, logoutRequest } = authSlice.actions
 export const authReducer = authSlice.reducer
 
-export const authEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
+export const logoutEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
+    filter(authSlice.actions.logoutRequest.match),
+    mapTo(authSlice.actions.logoutSuccess(null))
+)
+
+export const loginEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
     filter(authSlice.actions.loginRequest.match),
     mergeMap( action => {
-        const form = new FormData()
+        const data = new FormData()
         for (const key in action.payload) {
-            form.append(key, action.payload[key])
+            data.append(key, action.payload[key])
         }
-        return fetch(
-            process.env.REACT_APP_BASE_URL + "auth/login/", {
-                method: 'POST',
-                body: form
-            }
-        ).then( response => {
-            if (!response.ok) {
-                return Promise.reject(response)
-            }
-            return response
-        }).then( response => 
-            response.json()
-        ).then( body => 
-            authSlice.actions.loginSuccess(body)
-        ).catch( err =>
-            authSlice.actions.loginFailure()
-        )
+        return apiClient({
+            data,
+            url: "auth/login/",
+            method: "POST",
+            errorAction: authSlice.actions.loginFailure,
+            successAction: authSlice.actions.loginSuccess,
+        })
     })
 );
