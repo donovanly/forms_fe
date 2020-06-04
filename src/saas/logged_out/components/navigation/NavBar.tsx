@@ -92,7 +92,7 @@ const NavBar = (props: IProps) => {
               display="inline"
               color="primary"
             >
-              Wa
+              Form
             </Typography>
             <Typography
               variant="h4"
@@ -100,7 +100,7 @@ const NavBar = (props: IProps) => {
               display="inline"
               color="secondary"
             >
-              Ver
+              Brand
             </Typography>
           </div>
           <div>

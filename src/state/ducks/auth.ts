@@ -3,7 +3,7 @@ import {
     createSlice,
 } from "@reduxjs/toolkit"
 import { Epic } from "redux-observable";
-import { filter, mapTo, mergeMap  } from "rxjs/operators";
+import { filter, map, mergeMap  } from "rxjs/operators";
 import { apiClient } from '../wrappers/api'
 
 interface Auth {
@@ -56,7 +56,7 @@ export const authReducer = authSlice.reducer
 
 export const logoutEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
     filter(authSlice.actions.logoutRequest.match),
-    mapTo(authSlice.actions.logoutSuccess)
+    map(authSlice.actions.logoutSuccess)
 )
 
 export const loginEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
