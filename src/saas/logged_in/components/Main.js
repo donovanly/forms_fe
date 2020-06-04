@@ -231,7 +231,7 @@ function Main(props) {
 
   const selectDashboard = useCallback(() => {
     smoothScrollTop();
-    document.title = "WaVer - Dashboard";
+    document.title = `${process.env.REACT_APP_BRAND_NAME} - Dashboard`;
     setSelectedTab("Dashboard");
     if (!hasFetchedCardChart) {
       setHasFetchedCardChart(true);
@@ -248,7 +248,7 @@ function Main(props) {
 
   const selectPosts = useCallback(() => {
     smoothScrollTop();
-    document.title = "WaVer - Posts";
+    document.title = `${process.env.REACT_APP_BRAND_NAME} - Posts`;
     setSelectedTab("Posts");
     if (!hasFetchedEmojiTextArea) {
       setHasFetchedEmojiTextArea(true);
@@ -292,7 +292,7 @@ function Main(props) {
 
   const selectSubscription = useCallback(() => {
     smoothScrollTop();
-    document.title = "WaVer - Subscription";
+    document.title = `${process.env.REACT_APP_BRAND_NAME} - Subscription`;
     setSelectedTab("Subscription");
   }, [setSelectedTab]);
 

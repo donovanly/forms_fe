@@ -1,14 +1,14 @@
 import React, { memo } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import {
   AppBar,
-  Toolbar,
-  Typography,
   Button,
   Hidden,
   IconButton,
-  withStyles
+  Theme,
+  Toolbar,
+  Typography,
+  withStyles,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
@@ -17,7 +17,17 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import BookIcon from "@material-ui/icons/Book";
 import NavigationDrawer from "../../../shared/components/NavigationDrawer";
 
-const styles = theme => ({
+interface IProps {
+  classes: any,
+  handleMobileDrawerClose: () => void,
+  handleMobileDrawerOpen: () => void,
+  mobileDrawerOpen: boolean,
+  openLoginDialog: () => void,
+  openRegisterDialog: () => void,
+  selectedTab: string,
+}
+
+const styles = (theme: Theme) => ({
   appBar: {
     boxShadow: theme.shadows[6],
     backgroundColor: theme.palette.common.white
@@ -39,7 +49,7 @@ const styles = theme => ({
   }
 });
 
-function NavBar(props) {
+const NavBar = (props: IProps) => {
   const {
     classes,
     openRegisterDialog,
@@ -150,14 +160,5 @@ function NavBar(props) {
   );
 }
 
-NavBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  handleMobileDrawerOpen: PropTypes.func,
-  handleMobileDrawerClose: PropTypes.func,
-  mobileDrawerOpen: PropTypes.bool,
-  selectedTab: PropTypes.string,
-  openRegisterDialog: PropTypes.func.isRequired,
-  openLoginDialog: PropTypes.func.isRequired
-};
 
 export default withStyles(styles, { withTheme: true })(memo(NavBar));

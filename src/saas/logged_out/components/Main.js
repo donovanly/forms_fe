@@ -32,13 +32,13 @@ function Main(props) {
   const selectHome = useCallback(() => {
     smoothScrollTop();
     document.title =
-      "WaVer - Free template for building an SaaS or admin application";
+      `${process.env.REACT_APP_BRAND_NAME} - Slogan To Be Placed Here`;
     setSelectedTab("Home");
   }, [setSelectedTab]);
 
   const selectBlog = useCallback(() => {
     smoothScrollTop();
-    document.title = "WaVer - Blog";
+    document.title = `${process.env.REACT_APP_BRAND_NAME} - Blog`;
     setSelectedTab("Blog");
   }, [setSelectedTab]);
 
