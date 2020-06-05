@@ -16,11 +16,6 @@ import MoreIcon from '@material-ui/icons/MoreVert'
 import { useDispatch } from "react-redux"
 import { logoutRequest } from "../../../../state/ducks/auth"
 
-
-interface IProps {
-    classes: any
-}
-
 const useStyles = makeStyles((theme) => ({
   appBar: {
     boxShadow: theme.shadows[6],

@@ -1,20 +1,30 @@
 import React, { useState, useCallback, useRef, Fragment } from "react";
 import PropTypes from "prop-types";
 import {
-  FormHelperText,
-  TextField,
   Button,
   Checkbox,
-  Typography,
   FormControlLabel,
-  withStyles,
+  FormHelperText,
+  TextField,
+  Typography,
 } from "@material-ui/core";
 import FormDialog from "../../../shared/components/FormDialog";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
 import ButtonCircularProgress from "../../../shared/components/ButtonCircularProgress";
 import VisibilityPasswordTextField from "../../../shared/components/VisibilityPasswordTextField";
+import { makeStyles } from '@material-ui/core/styles';
+import { RootState } from "../../../../state/root";
+import { useDispatch, useSelector } from 'react-redux'
+import { registerRequest } from "../../../../state/ducks/auth"
 
-const styles = (theme) => ({
+interface IProps {
+  onClose: () => void,
+  openTermsDialog: () => void,
+  setStatus: (value: string | null) => void,
+  status: string
+}
+
+const useStyles = makeStyles((theme) => ({
   link: {
     transition: theme.transitions.create(["background-color"], {
       duration: theme.transitions.duration.complex,
@@ -29,35 +39,44 @@ const styles = (theme) => ({
       color: theme.palette.primary.dark,
     },
   },
-});
+}))
 
-function RegisterDialog(props) {
-  const { setStatus, theme, onClose, openTermsDialog, status, classes } = props;
-  const [isLoading, setIsLoading] = useState(false);
+const RegisterDialog = (props: IProps) => {
+  const { setStatus, onClose, openTermsDialog, status } = props;
+  const classes = useStyles()
+  const isLoading = useSelector((state: RootState) => state.authReducer.isLoading)
   const [hasTermsOfServiceError, setHasTermsOfServiceError] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const registerTermsCheckbox = useRef();
-  const registerPassword = useRef();
-  const registerPasswordRepeat = useRef();
+  const email = useRef<HTMLInputElement>(null);
+  const registerTermsCheckbox = useRef<HTMLInputElement>(null);
+  const registerPassword = useRef<HTMLInputElement>(null);
+  const registerPasswordRepeat = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch()
 
   const register = useCallback(() => {
-    if (!registerTermsCheckbox.current.checked) {
+    if (
+      registerTermsCheckbox &&
+      registerTermsCheckbox.current &&
+      !registerTermsCheckbox.current.checked
+    ) {
       setHasTermsOfServiceError(true);
       return;
     }
     if (
+      registerPassword &&
+      registerPassword.current &&
+      registerPasswordRepeat &&
+      registerPasswordRepeat.current &&
       registerPassword.current.value !== registerPasswordRepeat.current.value
     ) {
       setStatus("passwordsDontMatch");
       return;
     }
-    setStatus(null);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    dispatch(registerRequest({
+      username: (email.current as HTMLInputElement).value,
+      password: (registerPassword.current as HTMLInputElement).value,
+    }))
   }, [
-    setIsLoading,
     setStatus,
     setHasTermsOfServiceError,
     registerPassword,
@@ -71,7 +90,7 @@ function RegisterDialog(props) {
       onClose={onClose}
       open
       headline="Register"
-      onFormSubmit={(e) => {
+      onFormSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         register();
       }}
@@ -83,6 +102,7 @@ function RegisterDialog(props) {
             variant="outlined"
             margin="normal"
             required
+            inputRef={email}
             fullWidth
             error={status === "invalidEmail"}
             label="Email Address"
@@ -175,7 +195,7 @@ function RegisterDialog(props) {
                 I agree to the
                 <span
                   className={classes.link}
-                  onClick={isLoading ? null : openTermsDialog}
+                  onClick={() => !isLoading && openTermsDialog()}
                   tabIndex={0}
                   role="button"
                   onKeyDown={(event) => {
@@ -199,7 +219,7 @@ function RegisterDialog(props) {
               error
               style={{
                 display: "block",
-                marginTop: theme.spacing(-1),
+                // marginTop: theme.spacing(-1),
               }}
             >
               In order to create an account, you have to accept our terms of
@@ -244,4 +264,4 @@ RegisterDialog.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(RegisterDialog);
+export default RegisterDialog;
