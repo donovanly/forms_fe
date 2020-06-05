@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import PropTypes from "prop-types";
 import { Button, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 function ColoredButton(props) {
@@ -21,9 +20,5 @@ function ColoredButton(props) {
     </MuiThemeProvider>
   );
 }
-
-ColoredButton.propTypes = {
-  color: PropTypes.string.isRequired
-};
 
 export default memo(ColoredButton);

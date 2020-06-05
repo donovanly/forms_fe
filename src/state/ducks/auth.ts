@@ -47,11 +47,24 @@ export const authSlice = createSlice({
             isAuthenticated: false
         }),
         logoutRequest: (state, action) => ({ ...state, isLoading: true }),
-        logoutSuccess: (state, action) => initialState
+        logoutSuccess: (state, action) => initialState,
+        registerRequest: (state, action) => ({ ...state, isLoading: true }),
+        registerSuccess: (state, action) => ({
+            ...state,
+            auth: action.payload.data,
+            profile: action.payload.profile,
+            isLoading: false,
+            isAuthenticated: true
+        }),
+        registerFailure: (state, action) => ({
+            ...state,
+            isLoading: false,
+            isAuthenticated: false
+        })
     }
 });
 
-export const { loginRequest, logoutRequest } = authSlice.actions
+export const { loginRequest, logoutRequest, registerRequest } = authSlice.actions
 export const authReducer = authSlice.reducer
 
 export const logoutEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
@@ -72,6 +85,23 @@ export const loginEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer
             method: "POST",
             errorAction: authSlice.actions.loginFailure,
             successAction: authSlice.actions.loginSuccess,
+        })
+    })
+)
+
+export const registerEpic: Epic<AnyAction, AnyAction, ReturnType<typeof authReducer>> = (action$, store) => action$.pipe(
+    filter(authSlice.actions.registerRequest.match),
+    mergeMap( action => {
+        const data = new FormData()
+        for (const key in action.payload) {
+            data.append(key, action.payload[key])
+        }
+        return apiClient({
+            data,
+            url: "auth/register/",
+            method: "POST",
+            errorAction: authSlice.actions.registerFailure,
+            successAction: authSlice.actions.registerSuccess,
         })
     })
 )

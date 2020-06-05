@@ -1,25 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
-  Grid,
-  Typography,
   Box,
-  IconButton,
+  Grid,
   Hidden,
-  withStyles,
-  withWidth,
-  isWidthUp,
-  TextField
+  IconButton,
+  TextField,
+  Typography,
 } from "@material-ui/core";
 import PhoneIcon from "@material-ui/icons/Phone";
 import MailIcon from "@material-ui/icons/Mail";
 import WaveBorder from "../../../shared/components/WaveBorder";
 import transitions from "@material-ui/core/styles/transitions";
 import ColoredButton from "../../../shared/components/ColoredButton";
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   footerInner: {
-    backgroundColor: theme.palette.common.darkBlack,
+    backgroundColor: theme.palette.common.black,
     paddingTop: theme.spacing(8),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
@@ -72,8 +70,8 @@ const styles = theme => ({
   },
   whiteBg: {
     backgroundColor: theme.palette.common.white
-  }
-});
+  },
+}));
 
 const infos = [
   {
@@ -153,17 +151,20 @@ const socialIcons = [
   }
 ];
 
-function Footer(props) {
-  const { classes, theme, width } = props;
+const Footer = () => {
+  const theme = useTheme()
+  const classes = useStyles()
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+
   return (
     <footer className="lg-p-top">
       <WaveBorder
-        upperColor="#FFFFFF"
-        lowerColor={theme.palette.common.darkBlack}
+        upperColor={theme.palette.background.default}
+        lowerColor={theme.palette.common.black}
         animationNegativeDelay={4}
       />
       <div className={classes.footerInner}>
-        <Grid container spacing={isWidthUp("md", width) ? 10 : 5}>
+        <Grid container spacing={matches ? 10 : 5}>
           <Grid item xs={12} md={6} lg={4}>
             <form>
               <Box display="flex" flexDirection="column">
@@ -249,10 +250,4 @@ function Footer(props) {
   );
 }
 
-Footer.propTypes = {
-  theme: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
-  width: PropTypes.string.isRequired
-};
-
-export default withWidth()(withStyles(styles, { withTheme: true })(Footer));
+export default Footer

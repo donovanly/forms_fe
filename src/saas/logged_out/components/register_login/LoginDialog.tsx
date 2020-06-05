@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useRef, Fragment } from "react";
 import classNames from "classnames";
 import {
-  TextField,
   Button,
   Checkbox,
-  Typography,
   FormControlLabel,
-  withStyles,
-  Theme,
+  makeStyles,
+  TextField,
+  Typography,
 } from "@material-ui/core";
 import FormDialog from "../../../shared/components/FormDialog";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
@@ -25,7 +24,7 @@ interface IProps {
   status: string,
 }
 
-const styles = (theme: Theme) => ({
+const useStyles = makeStyles((theme) => ({
   forgotPassword: {
     marginTop: theme.spacing(2),
     color: theme.palette.primary.main,
@@ -44,16 +43,16 @@ const styles = (theme: Theme) => ({
   formControlLabel: {
     marginRight: 0,
   },
-});
+}))
 
 const LoginDialog = (props: IProps) => {
   const {
-    classes,
     onClose,
     openChangePasswordDialog,
     setStatus,
     status,
   } = props;
+  const classes = useStyles()
   const isLoading = useSelector((state: RootState) => state.authReducer.isLoading)
   const dispatch = useDispatch()
 
@@ -187,4 +186,4 @@ const LoginDialog = (props: IProps) => {
   );
 }
 
-export default withStyles(styles)(LoginDialog);
+export default LoginDialog;

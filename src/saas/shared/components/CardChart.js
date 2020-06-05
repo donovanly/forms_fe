@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import PropTypes from "prop-types";
 import {
   AreaChart,
   Area,
@@ -208,13 +207,13 @@ function CardChart(props) {
   );
 }
 
-CardChart.propTypes = {
-  color: PropTypes.string.isRequired,
-  data: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  height: PropTypes.string.isRequired
-};
+// CardChart.propTypes = {
+//   color: PropTypes.string.isRequired,
+//   data: PropTypes.array.isRequired,
+//   title: PropTypes.string.isRequired,
+//   classes: PropTypes.object.isRequired,
+//   theme: PropTypes.object.isRequired,
+//   height: PropTypes.string.isRequired
+// };
 
 export default withStyles(styles, { withTheme: true })(CardChart);

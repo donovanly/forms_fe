@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useDropzone } from "react-dropzone";
 import classNames from "classnames";
 import { Box, withStyles } from "@material-ui/core";
@@ -57,14 +56,14 @@ function Dropzone(props) {
   );
 }
 
-Dropzone.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  onDrop: PropTypes.func,
-  accept: PropTypes.string,
-  fullHeight: PropTypes.bool,
-  style: PropTypes.object,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
-};
+// Dropzone.propTypes = {
+//   classes: PropTypes.object.isRequired,
+//   theme: PropTypes.object.isRequired,
+//   onDrop: PropTypes.func,
+//   accept: PropTypes.string,
+//   fullHeight: PropTypes.bool,
+//   style: PropTypes.object,
+//   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+// };
 
 export default withStyles(styles, { withTheme: true })(Dropzone);

@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import PriceCard from "./PriceCard";
 import calculateSpacing from "./calculateSpacing";
+import { useTheme } from '@material-ui/core/styles';
 
 const styles = theme => ({
   containerFix: {
@@ -47,8 +48,9 @@ const styles = theme => ({
 
 function PricingSection(props) {
   const { width, classes } = props;
+  const theme = useTheme()
   return (
-    <div className="lg-p-top" style={{ backgroundColor: "#FFFFFF" }}>
+    <div className="lg-p-top" style={{ backgroundColor: theme.palette.background.default }}>
       <Typography variant="h3" align="center" className="lg-mg-bottom">
         Pricing
       </Typography>
