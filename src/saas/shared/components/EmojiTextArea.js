@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useCallback } from "react";
-import PropTypes from "prop-types";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import {
@@ -184,15 +183,15 @@ function EmojiTextarea(props) {
   );
 }
 
-EmojiTextarea.propTypes = {
-  theme: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
-  emojiSet: PropTypes.string.isRequired,
-  rightContent: PropTypes.element,
-  placeholder: PropTypes.string,
-  maxCharacters: PropTypes.number,
-  onChange: PropTypes.func,
-  inputClassName: PropTypes.string
-};
+// EmojiTextarea.propTypes = {
+//   theme: PropTypes.object.isRequired,
+//   classes: PropTypes.object.isRequired,
+//   emojiSet: PropTypes.string.isRequired,
+//   rightContent: PropTypes.element,
+//   placeholder: PropTypes.string,
+//   maxCharacters: PropTypes.number,
+//   onChange: PropTypes.func,
+//   inputClassName: PropTypes.string
+// };
 
 export default withStyles(styles, { withTheme: true })(EmojiTextarea);

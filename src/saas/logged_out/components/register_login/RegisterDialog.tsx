@@ -77,6 +77,7 @@ const RegisterDialog = (props: IProps) => {
       password: (registerPassword.current as HTMLInputElement).value,
     }))
   }, [
+    dispatch,
     setStatus,
     setHasTermsOfServiceError,
     registerPassword,

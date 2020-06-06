@@ -4,12 +4,6 @@ import { authReducer, loginEpic, logoutEpic, registerEpic } from './ducks/auth'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage';
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['authReducer']
-}
-
 const authReducerConfig = {
     key: 'authReducer',
     storage,
@@ -22,8 +16,8 @@ export const rootEpic = combineEpics<any>(
   registerEpic,
 )
 
-export const reducer = persistReducer(persistConfig, combineReducers({
+export const reducer = combineReducers({
   authReducer: persistReducer(authReducerConfig, authReducer),
-}))
+})
 
 export type RootState = ReturnType<typeof reducer>

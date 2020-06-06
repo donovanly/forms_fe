@@ -1,5 +1,4 @@
 import React, { useRef, useCallback, useEffect } from "react";
-import PropTypes from "prop-types";
 import Cropper from "react-cropper";
 import { withStyles } from "@material-ui/core";
 import shadeColor from "../functions/shadeColor";
@@ -310,13 +309,13 @@ function ImageCropper(props) {
   );
 }
 
-ImageCropper.propTypes = {
-  classes: PropTypes.object.isRequired,
-  color: PropTypes.string.isRequired,
-  src: PropTypes.string,
-  onCrop: PropTypes.func,
-  setCropFunction: PropTypes.func,
-  aspectRatio: PropTypes.number,
-};
+// ImageCropper.propTypes = {
+//   classes: PropTypes.object.isRequired,
+//   color: PropTypes.string.isRequired,
+//   src: PropTypes.string,
+//   onCrop: PropTypes.func,
+//   setCropFunction: PropTypes.func,
+//   aspectRatio: PropTypes.number,
+// };
 
 export default withStyles(styles)(ImageCropper);
