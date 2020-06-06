@@ -152,14 +152,6 @@ const NavBar = (props: IProps) => {
           >
             <MenuIcon />
         </IconButton>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="open drawer"
-        >
-          <MenuIcon />
-        </IconButton>
         <div className={classes.grow} />
         <div className={classes.sectionDesktop}>
           <IconButton aria-label="show 4 new mails" className={classes.badge}>

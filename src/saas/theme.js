@@ -121,7 +121,7 @@ const theme = createMuiTheme({
   },
   typography: {
     useNextVariants: true
-  }
+  },
 });
 
 export default responsiveFontSizes(theme);

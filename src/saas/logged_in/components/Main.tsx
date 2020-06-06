@@ -46,7 +46,7 @@ interface IPost {
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    marginLeft: theme.spacing(9),
+    marginLeft: theme.spacing(25),
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,

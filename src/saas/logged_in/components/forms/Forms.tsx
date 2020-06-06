@@ -212,6 +212,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           <Button
             className={classes.button}
             color="secondary"
+            href="/c/forms/create"
             size="medium"
             variant="contained"
           >

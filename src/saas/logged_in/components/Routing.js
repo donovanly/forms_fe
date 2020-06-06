@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import Forms from "./forms/Forms";
+import CreateForm from "./forms/CreateForm";
 import Reports from "./reports/Reports";
 import PropsRoute from "../../shared/components/PropsRoute";
 import { Switch } from "react-router-dom";
@@ -46,6 +47,10 @@ const Routing = () => {
   return (
     <div className={classes.wrapper}>
       <Switch>
+        <PropsRoute
+          path="/c/forms/create"
+          component={CreateForm}
+        />
         <PropsRoute
           path="/c/forms"
           component={Forms}
