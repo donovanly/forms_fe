@@ -16,7 +16,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import { Button } from '@material-ui/core';
 
 const isDenseTable = true
 
@@ -157,7 +157,7 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
+      paddingRight: theme.spacing(2),
     },
     highlight:
       theme.palette.type === 'light'
@@ -172,6 +172,9 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     title: {
       flex: '1 1 100%',
     },
+    button: {
+      width: "160px"
+    }
   }),
 );
 
@@ -205,10 +208,15 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
+        <Tooltip title="Create a new form">
+          <Button
+            className={classes.button}
+            color="secondary"
+            size="medium"
+            variant="contained"
+          >
+            Create Form
+          </Button>
         </Tooltip>
       )}
     </Toolbar>
@@ -222,7 +230,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       width: '100%',
-      marginBottom: theme.spacing(2),
     },
     table: {
       minWidth: 750,

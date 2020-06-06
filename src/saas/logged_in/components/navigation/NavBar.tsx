@@ -21,7 +21,6 @@ interface IProps {
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    boxShadow: theme.shadows[6],
     backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
