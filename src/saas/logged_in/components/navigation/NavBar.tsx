@@ -7,7 +7,6 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Typography
 } from "@material-ui/core"
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MailIcon from '@material-ui/icons/Mail'
@@ -16,10 +15,14 @@ import MoreIcon from '@material-ui/icons/MoreVert'
 import { useDispatch } from "react-redux"
 import { logoutRequest } from "../../../../state/ducks/auth"
 
+interface IProps {
+  handleDrawerToggle: () => void
+}
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     boxShadow: theme.shadows[6],
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -54,16 +57,18 @@ const useStyles = makeStyles((theme) => ({
   },
   iconClass: {
     color: theme.palette.text.primary
+  },
+  badge: {
+    color: theme.palette.secondary.main,
   }
 }))
 
-const NavBar = () => {
+const NavBar = (props: IProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-
+  const { handleDrawerToggle } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
-
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
@@ -140,6 +145,15 @@ const NavBar = () => {
     <AppBar position="static" className={classes.appBar}>
       <Toolbar>
         <IconButton
+            color="primary"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+        </IconButton>
+        <IconButton
           edge="start"
           className={classes.menuButton}
           color="inherit"
@@ -147,13 +161,10 @@ const NavBar = () => {
         >
           <MenuIcon />
         </IconButton>
-        <Typography className={classes.title} variant="h6" noWrap>
-          Material-UI
-        </Typography>
         <div className={classes.grow} />
         <div className={classes.sectionDesktop}>
-          <IconButton aria-label="show 4 new mails" color="primary">
-            <Badge badgeContent={4} color="secondary">
+          <IconButton aria-label="show 4 new mails" className={classes.badge}>
+            <Badge badgeContent={4} color="primary">
               <MailIcon />
             </Badge>
           </IconButton>
@@ -163,7 +174,7 @@ const NavBar = () => {
             aria-controls={menuId}
             aria-haspopup="true"
             onClick={handleProfileMenuOpen}
-            color="primary"
+            color="secondary"
           >
             <AccountCircle />
           </IconButton>
@@ -174,7 +185,7 @@ const NavBar = () => {
             aria-controls={mobileMenuId}
             aria-haspopup="true"
             onClick={handleMobileMenuOpen}
-            color="inherit"
+            color="secondary"
           >
             <MoreIcon />
           </IconButton>

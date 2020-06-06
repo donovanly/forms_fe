@@ -12,6 +12,7 @@ import MeassageIcon from "@material-ui/icons/Message";
 import CancelIcon from "@material-ui/icons/Cancel";
 import calculateSpacing from "./calculateSpacing";
 import FeatureCard from "./FeatureCard";
+import { useTheme } from '@material-ui/core/styles';
 
 const iconSize = 30;
 
@@ -101,8 +102,9 @@ const features = [
 
 function FeatureSection(props) {
   const { width } = props;
+  const theme = useTheme()
   return (
-    <div style={{ backgroundColor: "#FFFFFF" }}>
+    <div style={{ backgroundColor: theme.palette.background.default }}>
       <div className="container-fluid lg-p-top">
         <Typography variant="h3" align="center" className="lg-mg-bottom">
           Features

@@ -167,7 +167,7 @@ function HeadSection(props) {
       </div>
       <WaveBorder
         upperColor={theme.palette.secondary.main}
-        lowerColor="#FFFFFF"
+        lowerColor={theme.palette.background.default}
         className={classes.waveBorder}
         animationNegativeDelay={2}
       />
