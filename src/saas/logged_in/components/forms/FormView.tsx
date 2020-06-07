@@ -1,6 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
+import Checkbox from '@material-ui/core/Checkbox';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,13 +13,10 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
+import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 
 const isDenseTable = true
 
@@ -172,9 +172,6 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     title: {
       flex: '1 1 100%',
     },
-    button: {
-      width: "160px"
-    }
   }),
 );
 
@@ -210,13 +207,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       ) : (
         <Tooltip title="Create a new form">
           <Button
-            className={classes.button}
             color="secondary"
             href="/c/forms/create"
             size="medium"
             variant="contained"
           >
-            Create Form
+            New
           </Button>
         </Tooltip>
       )}
@@ -249,7 +245,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Forms = () => {
+const FormView = () => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
@@ -380,4 +376,4 @@ const Forms = () => {
   );
 }
 
-export default Forms
+export default FormView

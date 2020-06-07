@@ -1,14 +1,20 @@
 import React from "react"
-import { makeStyles, createStyles, Theme, Paper } from "@material-ui/core";
+
+import FormBuilder from "./FormBuilder";
+import FormPreview from "./FormPreview";
+import Grid from '@material-ui/core/Grid';
+import { makeStyles, createStyles, Theme } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      flexGrow: 1,
+      width: "100%"
     },
-    paper: {
-      width: '100%',
-    },
+    grid: {
+      minWidth: "475px",
+      maxWidth: "475px",
+    }
 }))
 
 const CreateForm = () => {
@@ -16,9 +22,14 @@ const CreateForm = () => {
 
   return (
     <div className={classes.root}>
-      <Paper  className={classes.paper}>
-        Hello world
-      </Paper>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} className={classes.grid}>
+          <FormBuilder />
+        </Grid>
+        <Grid item xs={12} sm={6} className={classes.grid}>
+          <FormPreview />
+        </Grid>
+      </Grid>
     </div>
   )
 }

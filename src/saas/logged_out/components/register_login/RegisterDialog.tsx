@@ -96,7 +96,6 @@ const RegisterDialog = (props: IProps) => {
         register();
       }}
       hideBackdrop
-      hasCloseIcon
       content={
         <Fragment>
           <TextField
@@ -227,16 +226,12 @@ const RegisterDialog = (props: IProps) => {
               service.
             </FormHelperText>
           )}
-          {status === "accountCreated" ? (
+          {status === "accountCreated" &&
             <HighlightedInformation>
               We have created your account. Please click on the link in the
               email we have sent to you before logging in.
             </HighlightedInformation>
-          ) : (
-            <HighlightedInformation>
-              Registration is disabled until we go live.
-            </HighlightedInformation>
-          )}
+          }
         </Fragment>
       }
       actions={

@@ -17,7 +17,6 @@ interface IProps {
   mobileOpen: boolean
 }
 
-
 const useStyles = makeStyles((theme) => ({
   drawer: {
     [theme.breakpoints.up('sm')]: {

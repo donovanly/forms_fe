@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import Forms from "./forms/Forms";
+import FormView from "./forms/FormView";
 import CreateForm from "./forms/CreateForm";
 import Reports from "./reports/Reports";
 import PropsRoute from "../../shared/components/PropsRoute";
@@ -9,9 +9,9 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     margin: theme.spacing(1),
-    width: "auto",
+    width: "100%",
     [theme.breakpoints.up("xs")]: {
-      width: "95%",
+      width: "90%",
       marginLeft: "auto",
       marginRight: "auto",
       marginTop: theme.spacing(4),
@@ -27,14 +27,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
-      width: "82.5%",
+      width: "87.5%",
       marginLeft: "auto",
       marginRight: "auto",
     },
     [theme.breakpoints.up("lg")]: {
       marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
-      width: "70%",
+      width: "85%",
       marginLeft: "auto",
       marginRight: "auto",
     },
@@ -53,7 +53,7 @@ const Routing = () => {
         />
         <PropsRoute
           path="/c/forms"
-          component={Forms}
+          component={FormView}
         />
         <PropsRoute
           path="/c/reports"
