@@ -17,12 +17,10 @@ interface IProps {
   mobileOpen: boolean
 }
 
-const drawerWidth = 195;
-
 const useStyles = makeStyles((theme) => ({
   drawer: {
     [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
+      width: theme.spacing(25),
       flexShrink: 0,
     },
   },
@@ -35,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
   toolbar: {...theme.mixins.toolbar, backgroundColor: theme.palette.background.default},
   drawerPaper: {
-    width: drawerWidth,
+    width: theme.spacing(25),
     backgroundColor: theme.palette.background.default
   },
   content: {

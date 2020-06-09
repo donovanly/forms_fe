@@ -1,6 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
+import Checkbox from '@material-ui/core/Checkbox';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,13 +13,10 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import Typography from '@material-ui/core/Typography';
+import { Button } from '@material-ui/core';
+import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 
 const isDenseTable = true
 
@@ -157,7 +157,7 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
+      paddingRight: theme.spacing(2),
     },
     highlight:
       theme.palette.type === 'light'
@@ -205,10 +205,15 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
+        <Tooltip title="Create a new form">
+          <Button
+            color="secondary"
+            href="/c/forms/create"
+            size="medium"
+            variant="contained"
+          >
+            New
+          </Button>
         </Tooltip>
       )}
     </Toolbar>
@@ -222,7 +227,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       width: '100%',
-      marginBottom: theme.spacing(2),
     },
     table: {
       minWidth: 750,
@@ -241,7 +245,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Forms = () => {
+const FormView = () => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
@@ -372,4 +376,4 @@ const Forms = () => {
   );
 }
 
-export default Forms
+export default FormView

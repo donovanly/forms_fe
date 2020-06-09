@@ -1,7 +1,6 @@
 import React, { memo } from "react"
 import {
   AppBar,
-  Badge,
   IconButton,
   makeStyles,
   Menu,
@@ -9,7 +8,6 @@ import {
   Toolbar,
 } from "@material-ui/core"
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import MailIcon from '@material-ui/icons/Mail'
 import MenuIcon from '@material-ui/icons/Menu'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import { useDispatch } from "react-redux"
@@ -21,7 +19,6 @@ interface IProps {
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    boxShadow: theme.shadows[6],
     backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -118,14 +115,6 @@ const NavBar = (props: IProps) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -153,21 +142,8 @@ const NavBar = (props: IProps) => {
           >
             <MenuIcon />
         </IconButton>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="open drawer"
-        >
-          <MenuIcon />
-        </IconButton>
         <div className={classes.grow} />
         <div className={classes.sectionDesktop}>
-          <IconButton aria-label="show 4 new mails" className={classes.badge}>
-            <Badge badgeContent={4} color="primary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
           <IconButton
             edge="end"
             aria-label="account of current user"
