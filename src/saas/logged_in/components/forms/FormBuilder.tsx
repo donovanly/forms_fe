@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     addOptionsButton: {
       margin: "15px 0px 10px 10px",
     },
-    deleteOptinosButton: {
+    deleteOptionButton: {
       margin: "15px 10px 10px 10px",
     },
     title: {
@@ -63,18 +63,17 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1)
     },
     dynamicQuestionTF:  {
-      width: "236px"
+      width: "calc(100% - 73px - 64px - 30px)"
     },
-    avatar: {
-
-    }
 }))
 
 
 const requiredQuestionTypes = ["Short Text","Long Text", "Dropdown", "Auto Complete", "Multiple Choice"]
 const multiAnswerQuestionTypes = ["Auto Complete", "Checkboxes", "Dropdown", "Multiple Choice"]
-const allQuestionTypes = ["Title", "Short Text","Long Text","Dropdown","Auto Complete","Multiple Choice","Checkboxes",]
-const autoCompleteOptions = {
+const allQuestionTypes = [
+  "Title", "Short Text","Long Text","Dropdown","Auto Complete","Multiple Choice","Checkboxes"
+]
+const renderedOptions = {
   "Title":
     <Box style={{alignItems: "center"}}>
       <TitleIcon fontSize="large" style={{paddingRight: "10px"}} />
@@ -142,7 +141,7 @@ const FormBuilder = () => {
               label="Element Type"
               name="type"
               options={allQuestionTypes}
-              renderOptions={autoCompleteOptions}
+              renderOptions={renderedOptions}
               variant="outlined"
             />
           </FormControl>
@@ -153,7 +152,7 @@ const FormBuilder = () => {
               }}
               inputRef={register({required: true})}
               label="Question Title"
-              name="title"
+              name="label"
               required
               type="text"
             />
@@ -197,12 +196,12 @@ const FormBuilder = () => {
                 }
                 control={control}
                 defaultValue={"Option " + (index + 1)}
-                name={`questionOptions[${index}].name`}
+                name={`questionOptions[${index}].label`}
               />
               {index === fields.length - 1 ? (
                 <Fragment>
                   <Button
-                  className={classes.deleteOptinosButton}
+                  className={classes.deleteOptionButton}
                   color="secondary"
                   disabled={fields.length === 1}
                   onClick={() => remove(index)}
@@ -215,7 +214,7 @@ const FormBuilder = () => {
                   <Button
                     className={classes.addOptionsButton}
                     color="primary"
-                    onClick={() => append({name: "Option " + (index + 2)})}
+                    onClick={() => append({label: "Option " + (index + 2)})}
                     size="small"
                     type="button"
                     variant="outlined"
@@ -225,7 +224,7 @@ const FormBuilder = () => {
                 </Fragment>
               ) : (
                 <Button
-                  className={classes.deleteOptinosButton}
+                  className={classes.deleteOptionButton}
                   color="secondary"
                   onClick={() => remove(index)}
                   size="small"

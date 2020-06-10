@@ -9,9 +9,9 @@ import {
   Theme,
   Typography,
 } from "@material-ui/core";
-import { useSelector } from "react-redux";
 import { RenderPreview } from './RenderPreview'
 import { RootState } from "../../../../state/root";
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const FormPreview = () => {
   const classes = useStyles()
   const formElements = useSelector((state: RootState) => state.formReducer.formElements)
-
 
   return (
     <Paper className={classes.paper}>

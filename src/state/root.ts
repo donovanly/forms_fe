@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import { combineEpics } from 'redux-observable'
 import { authReducer, loginEpic, logoutEpic, registerEpic } from './ducks/auth'
-import { formReducer } from './ducks/form'
+import { formReducer, saveFormEpic } from './ducks/form'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage';
 
@@ -15,6 +15,7 @@ export const rootEpic = combineEpics<any>(
   loginEpic,
   logoutEpic,
   registerEpic,
+  saveFormEpic,
 )
 
 export const reducer = combineReducers({

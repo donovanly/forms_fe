@@ -36,7 +36,7 @@ export const authSlice = createSlice({
         loginRequest: (state, action) => ({ ...state, isLoading: true }),
         loginSuccess: (state, action) => ({
             ...state,
-            auth: action.payload.data,
+            auth: {...action.payload, profile: undefined},
             profile: action.payload.profile,
             isLoading: false,
             isAuthenticated: true
@@ -51,7 +51,7 @@ export const authSlice = createSlice({
         registerRequest: (state, action) => ({ ...state, isLoading: true }),
         registerSuccess: (state, action) => ({
             ...state,
-            auth: action.payload.data,
+            auth: {...action.payload, profile: undefined},
             profile: action.payload.profile,
             isLoading: false,
             isAuthenticated: true

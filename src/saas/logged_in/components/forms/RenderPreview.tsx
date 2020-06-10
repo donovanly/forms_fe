@@ -32,7 +32,7 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
             }}
             defaultValue=""
             error={questionSettings.required}
-            label={questionSettings.title}
+            label={questionSettings.label}
           />
           {questionSettings.required && <FormHelperText error={true}>This field is required.</FormHelperText>}
         </FormControl>
@@ -47,7 +47,7 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
             }}
             defaultValue=""
             error={questionSettings.required}
-            label={questionSettings.title}
+            label={questionSettings.label}
             multiline
             rows={3} 
           />
@@ -63,20 +63,20 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
             shrink
             required={ questionSettings.required}
             >
-            {questionSettings.title}
+            {questionSettings.label}
           </InputLabel>
           <Select
             defaultValue=""
             error={questionSettings.required}
-            label={questionSettings.title}
+            label={questionSettings.label}
             labelId="standard-dropdown"
           >
             <MenuItem value="">None</MenuItem>
             {questionSettings.questionOptions ? questionSettings.questionOptions.map((option, index) => 
               <MenuItem
                 key={index}
-                value={option.name}
-              >{option.name}</MenuItem>
+                value={option.label}
+              >{option.label}</MenuItem>
             ) : <MenuItem value="Option 1">Option 1</MenuItem>}
           </Select>
           {questionSettings.required && <FormHelperText error={true}>This field is required.</FormHelperText>}
@@ -85,14 +85,14 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
     case "Multiple Choice":
       return (
         <FormControl style={{marginBottom: "10px", marginTop: "10px"}} fullWidth>
-          <FormLabel component="legend">{questionSettings.title}</FormLabel>
+          <FormLabel component="legend">{questionSettings.label}</FormLabel>
           <RadioGroup defaultValue={"Option 1"}>
             {questionSettings.questionOptions && questionSettings.questionOptions.map((option, index) => 
               <FormControlLabel
                 control={<Radio />}
                 key={index}
-                label={option.name}
-                value={option.name}
+                label={option.label}
+                value={option.label}
               />
             )}
           </RadioGroup> 
@@ -101,14 +101,14 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
     case "Checkboxes":
       return (
         <FormControl style={{marginBottom: "10px", marginTop: "10px"}} fullWidth>
-          <FormLabel>{questionSettings.title}</FormLabel>
+          <FormLabel>{questionSettings.label}</FormLabel>
           <FormGroup>
           {questionSettings.questionOptions ? questionSettings.questionOptions.map((option, index) => 
               <FormControlLabel
                 control={<Checkbox />}
                 key={index}
-                label={option.name}
-                value={option.name}
+                label={option.label}
+                value={option.label}
               />
             ) : <FormControlLabel control={<Checkbox />} label="Option 1" />}
           </FormGroup>
@@ -126,11 +126,11 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
                 shrink: true,
               }}
               error={questionSettings.required}
-              label={questionSettings.title}
+              label={questionSettings.label}
               variant="outlined"
             />
           )}
-          options={questionSettings.questionOptions ? questionSettings.questionOptions.map(option => option.name) : ["Option 1"]}
+          options={questionSettings.questionOptions ? questionSettings.questionOptions.map(option => option.label) : ["Option 1"]}
         />
         {questionSettings.required && <FormHelperText error={true}>This field is required.</FormHelperText>}
         </FormControl>
@@ -138,7 +138,7 @@ export const RenderPreview = (props: {questionSettings: FormElement}) => {
     case "Title":
       return (
         <Typography variant={questionSettings.titleType}>
-          {questionSettings.title}
+          {questionSettings.label}
         </Typography>
       )
     default:

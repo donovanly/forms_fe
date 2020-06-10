@@ -13,7 +13,7 @@ interface IProps {
 export const AuthRoute = (props: IProps) => {
     const { type } = props
     const isAuthenticated = useSelector((state: RootState) => state.authReducer.isAuthenticated)
-    if (type === "guest" && isAuthenticated) return <Redirect to="/c" />
+    if (type === "guest" && isAuthenticated) return <Redirect to="/c/forms" />
     else if (type === "private" && !isAuthenticated) return <Redirect to="/" />
 
     return <Route {...props} />
