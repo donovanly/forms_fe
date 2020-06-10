@@ -27,18 +27,13 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       width: "100%",
     },
-    gridContainer:{
-      marginTop: "64px"
-    },
     gridItem: {
       minWidth: "425px",
       maxWidth: "475px",
     },
-    appBar: {
-      alignItems: "center",
-      paddingBottom:"10px",
-      paddingTop: "10px",
-      top: "64px",
+    stepper: {
+      background:"inherit",
+      width: "600px"
     }
 }))
 
@@ -117,10 +112,10 @@ const CreateForm = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} justify="center" className={classes.gridContainer}>
+      <Grid container spacing={3} justify="center">
         <Grid item xs={12} justify="center" style={{maxWidth:"100%"}}>
           <Box display="flex" justifyContent="center">
-            <Stepper activeStep={activeStep} nonLinear style={{background:"inherit", width:"600px"}}>
+            <Stepper activeStep={activeStep} nonLinear className={classes.stepper}>
               <Step>
                 <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(0)}>
                   Create Form

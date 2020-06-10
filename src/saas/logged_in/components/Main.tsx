@@ -75,7 +75,7 @@ const Main = () => {
         mobileOpen={mobileOpen}
       />
       <main className={classNames(classes.main)}>
-        <Routing/>
+        <Routing />
       </main>
     </Fragment>
   );
