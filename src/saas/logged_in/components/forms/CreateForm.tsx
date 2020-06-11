@@ -27,9 +27,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       width: "100%",
     },
-    gridItem: {
+    elementSelectorGrid: {
       minWidth: "425px",
       maxWidth: "475px",
+    },
+    formPreviewGrid: {
+      minWidth: "425px",
     },
     stepper: {
       background:"inherit",
@@ -102,8 +105,7 @@ const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const classes = useStyles()
   const dispatch = useDispatch()
-  const description = useSelector((state: RootState) => state.formReducer.description)
-  const name = useSelector((state: RootState) => state.formReducer.formName)
+  const name = useSelector((state: RootState) => state.formReducer.name)
   const formElements = useSelector((state: RootState) => state.formReducer.formElements)
 
   const handleStep = (step: number) => () => {
@@ -118,7 +120,7 @@ const CreateForm = () => {
             <Stepper activeStep={activeStep} nonLinear className={classes.stepper}>
               <Step>
                 <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(0)}>
-                  Create Form
+                  Edit Form
                 </StepLabel>
               </Step>
               <Step>
@@ -134,10 +136,10 @@ const CreateForm = () => {
             </Stepper>
           </Box>
         </Grid>
-        <Grid item xs={12} sm={6} className={classes.gridItem}>
+        <Grid item xs={10} sm={6} className={classes.elementSelectorGrid}>
           <FormBuilder />
         </Grid>
-        <Grid item xs={12} sm={6} className={classes.gridItem}>
+        <Grid item xs={10} sm={8} className={classes.formPreviewGrid}>
           <FormPreview />
         </Grid>
       </Grid>

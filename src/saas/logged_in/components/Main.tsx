@@ -1,9 +1,12 @@
-import React, { memo, useState, Fragment } from "react";
+import React, { memo, useState, Fragment, useEffect } from "react";
 import classNames from "classnames";
 import Routing from "./Routing";
 import NavBar from "./navigation/NavBar";
 import SideBar from "./navigation/SideBar";
 import { makeStyles } from '@material-ui/core/styles';
+import { formListRequest } from "../../../state/ducks/formList";
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from "../../../state/root";
 
 interface ITarget {
   [index: number] :
@@ -59,11 +62,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = () => {
   const classes = useStyles()
+  const dispatch = useDispatch();
+  const formList = useSelector((state: RootState) => state.formListReducer.formList);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  useEffect(() => {
+    dispatch(formListRequest())
+  }, [dispatch])
 
   return (
     <Fragment>

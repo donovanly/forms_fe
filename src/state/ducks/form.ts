@@ -16,6 +16,15 @@ export interface FormElement {
   label: string,
   titleType?: "body1" | "caption" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6",
   type: string,
+  created?: string,
+  updated?: string,
+}
+
+export interface IForm {
+  created: string,
+  formElements: FormElement[],
+  name: string,
+  updated: string,
 }
 
 export const defaultFormElement = {
@@ -26,9 +35,8 @@ export const defaultFormElement = {
 } as FormElement
 
 const initialState = {
-  description: "test",
   formElements: [] as FormElement[],
-  formName: "name",
+  name: "name",
   isLoading: false
 }
 
@@ -45,14 +53,14 @@ export const formSlice = createSlice({
         isLoading: false
       }),
       saveFormSuccess: (state, action) => initialState,
-      saveFormFailure: (state, action) => initialState
+      saveFormFailure: (state, action) => initialState,
   }
 });
 
 export const { addElement, saveFormRequest } = formSlice.actions
 export const formReducer = formSlice.reducer
 
-export const saveFormEpic: Epic<AnyAction, AnyAction, ReturnType<typeof formReducer>> = (action$, store) => action$.pipe(
+export const formEpic: Epic<AnyAction, AnyAction, ReturnType<typeof formReducer>> = (action$, store) => action$.pipe(
   filter(formSlice.actions.saveFormRequest.match),
   mergeMap( action => {
       const data = new FormData()
