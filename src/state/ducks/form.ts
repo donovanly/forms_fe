@@ -23,6 +23,7 @@ export interface FormElement {
 export interface IForm {
   created: string,
   formElements: FormElement[],
+  id: number,
   name: string,
   updated: string,
 }

@@ -40,19 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }
 }))
 
-const getStepContent = (step: number) => {
-  switch (step) {
-    case 0:
-      return 'Step 1: Select campaign settings...';
-    case 1:
-      return 'Step 2: What is an ad group anyways?';
-    case 2:
-      return 'Step 3: This is the bit I really care about!';
-    default:
-      return 'Unknown step';
-  }
-}
-
 const useColorlibStepIconStyles = makeStyles({
   root: {
     backgroundColor: '#ccc',
