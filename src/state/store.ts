@@ -1,6 +1,5 @@
-import { AnyAction, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { rootEpic, reducer, RootState } from './root'
-import { createEpicMiddleware } from 'redux-observable'
+import { AnyAction, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { createEpicMiddleware } from 'redux-observable';
 import {
   persistStore,
   FLUSH,
@@ -8,8 +7,9 @@ import {
   PAUSE,
   PERSIST,
   PURGE,
-  REGISTER
-} from "redux-persist";
+  REGISTER,
+} from 'redux-persist';
+import { rootEpic, reducer, RootState } from './root';
 
 const epicMiddleware = createEpicMiddleware<AnyAction, AnyAction, RootState>();
 
@@ -18,17 +18,17 @@ const epicMiddleware = createEpicMiddleware<AnyAction, AnyAction, RootState>();
 const middleware = [
   ...getDefaultMiddleware({
     serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-    }
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
   }),
-  epicMiddleware
-]
+  epicMiddleware,
+];
 
 export const store = configureStore({
   reducer,
-  middleware
+  middleware,
 });
-export const persistor =  persistStore(store)
+export const persistor = persistStore(store);
 
 epicMiddleware.run(rootEpic);
 

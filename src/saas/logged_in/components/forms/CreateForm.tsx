@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback } from 'react';
 import {
   Box,
   createStyles,
@@ -6,38 +6,36 @@ import {
   Step,
   StepLabel,
   Stepper,
-  Theme,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 import clsx from 'clsx';
 import CreateIcon from '@material-ui/icons/Create';
-import FormBuilder from "./FormBuilder";
-import FormPreview from "./FormPreview";
 import Grid from '@material-ui/core/Grid';
 import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { v4 as uuid } from "uuid";
-import { DragDropContext, DropResult, DraggableLocation } from "react-beautiful-dnd";
+import { v4 as uuid } from 'uuid';
+import { DragDropContext, DropResult, DraggableLocation } from 'react-beautiful-dnd';
 import { StepIconProps } from '@material-ui/core/StepIcon';
+import FormPreview from './FormPreview';
+import FormBuilder from './FormBuilder';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-      width: "100%",
-    },
-    elementSelectorGrid: {
-      minWidth: "425px",
-      maxWidth: "475px",
-    },
-    formPreviewGrid: {
-      minWidth: "425px",
-    },
-    stepper: {
-      background:"inherit",
-      width: "600px"
-    }
-}))
+const useStyles = makeStyles(() => createStyles({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+  },
+  elementSelectorGrid: {
+    minWidth: '425px',
+    maxWidth: '475px',
+  },
+  formPreviewGrid: {
+    minWidth: '425px',
+  },
+  stepper: {
+    background: 'inherit',
+    width: '600px',
+  },
+}));
 
 const useColorlibStepIconStyles = makeStyles({
   root: {
@@ -50,9 +48,9 @@ const useColorlibStepIconStyles = makeStyles({
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    "&:hover": {
-      cursor: "pointer"
-    }
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   active: {
     backgroundImage:
@@ -67,7 +65,7 @@ const useColorlibStepIconStyles = makeStyles({
 
 const ColorlibStepIcon = (props: StepIconProps) => {
   const classes = useColorlibStepIconStyles();
-  const { active, completed } = props;
+  const { active, completed, icon } = props;
 
   const icons: { [index: string]: React.ReactElement } = {
     1: <CreateIcon />,
@@ -82,10 +80,10 @@ const ColorlibStepIcon = (props: StepIconProps) => {
         [classes.completed]: completed,
       })}
     >
-      {icons[String(props.icon)]}
+      {icons[String(icon)]}
     </div>
   );
-}
+};
 
 const reorder = (source: {id: string, type: string}[], startIndex: number, endIndex: number) => {
   const [removed] = source.splice(startIndex, 1);
@@ -93,33 +91,44 @@ const reorder = (source: {id: string, type: string}[], startIndex: number, endIn
   return source;
 };
 
-const copy = (source: {id: string, type: string}[], destination: {id: string, type: string}[], droppableSource:  DraggableLocation, droppableDestination: DraggableLocation) => {
+const copy = (
+  source: {
+    id: string,
+    type: string
+  }[],
+  destination: {
+    id: string,
+    type: string
+  }[],
+  droppableSource: DraggableLocation,
+  droppableDestination: DraggableLocation,
+) => {
   const item = source[droppableSource.index];
   destination.splice(droppableDestination.index, 0, { ...item, id: uuid() });
   return destination;
 };
 
 const elementTypes = [
-  {type: "Title", id: uuid()},
-  {type: "Short Text", id: uuid()},
-  {type: "Long Text", id: uuid()},
-  {type: "Dropdown", id: uuid()},
-  {type: "Auto Complete", id: uuid()},
-  {type: "Multiple Choice", id: uuid()},
-  {type: "Checkboxes", id: uuid()},
-]
+  { type: 'Title', id: uuid() },
+  { type: 'Short Text', id: uuid() },
+  { type: 'Long Text', id: uuid() },
+  { type: 'Dropdown', id: uuid() },
+  { type: 'Auto Complete', id: uuid() },
+  { type: 'Multiple Choice', id: uuid() },
+  { type: 'Checkboxes', id: uuid() },
+];
 
 const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [formElements, setFormElements] = useState<{id: string, type: string}[]>([])
-  const classes = useStyles()
+  const [formElements, setFormElements] = useState<{id: string, type: string}[]>([]);
+  const classes = useStyles();
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
   };
 
   const onDragEnd = useCallback((result: DropResult) => {
-    const { source, destination } = result
+    const { source, destination } = result;
 
     if (!destination) {
       return;
@@ -127,26 +136,21 @@ const CreateForm = () => {
 
     switch (source.droppableId) {
       case destination.droppableId:
-        setFormElements( state =>
-          reorder(state, source.index, destination.index)
-        )
-        break
-      case "FormElements":
-        setFormElements( state =>
-          copy(elementTypes, state, source, destination)
-        )
-        break
+        setFormElements((state) => reorder(state, source.index, destination.index));
+        break;
+      case 'FormElements':
+        setFormElements((state) => copy(elementTypes, state, source, destination));
+        break;
       default:
-        break
+        break;
     }
   },
-  [setFormElements]
-)
+  [setFormElements]);
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} justify="center">
-        <Grid item xs={12} justify="center" style={{maxWidth:"100%"}}>
+        <Grid item xs={12} justify="center" style={{ maxWidth: '100%' }}>
           <Box display="flex" justifyContent="center">
             <Stepper activeStep={activeStep} nonLinear className={classes.stepper}>
               <Step>
@@ -158,8 +162,8 @@ const CreateForm = () => {
                 <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(1)}>
                   Settings
                 </StepLabel>
-                </Step>
-                <Step>
+              </Step>
+              <Step>
                 <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(2)}>
                   Publish
                 </StepLabel>
@@ -177,7 +181,7 @@ const CreateForm = () => {
         </DragDropContext>
       </Grid>
     </div>
-  )
-}
+  );
+};
 
-export default CreateForm
+export default CreateForm;

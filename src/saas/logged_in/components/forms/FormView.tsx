@@ -18,15 +18,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
-import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
-import { Link } from "react-router-dom";
-import { RootState } from "../../../../state/root";
-import { IForm } from "../../../../state/ducks/form";
+import {
+  createStyles, lighten, makeStyles, Theme,
+} from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../../../state/root';
+import { IForm } from '../../../../state/ducks/form';
 
-type OmittedIForm = Omit<IForm, "formElements">
+type OmittedIForm = Omit<IForm, 'formElements'>
 
-const isDenseTable = true
+const isDenseTable = true;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -67,24 +69,24 @@ interface HeadCell {
 }
 
 const headCells: HeadCell[] = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Form Name' },
-  { id: 'created', numeric: false, disablePadding: false, label: 'Created Date' },
-  { id: 'updated', numeric: false, disablePadding: false, label: 'Last Modified' },
+  {
+    id: 'name', numeric: false, disablePadding: true, label: 'Form Name',
+  },
+  {
+    id: 'created', numeric: false, disablePadding: false, label: 'Created Date',
+  },
+  {
+    id: 'updated', numeric: false, disablePadding: false, label: 'Last Modified',
+  },
 ];
 
-interface EnhancedTableProps {
-  classes: ReturnType<typeof useStyles>;
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof OmittedIForm) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof OmittedIForm) => (event: React.MouseEvent<unknown>) => {
+  const {
+    classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,
+  } = props;
+  const createSortHandler = (
+    property: keyof OmittedIForm,
+  ) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -125,27 +127,25 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-const useToolbarStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-    },
-    highlight:
+const useToolbarStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+  highlight:
       theme.palette.type === 'light'
         ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-          }
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
         : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
-          },
-    title: {
-      flex: '1 1 100%',
-    },
-  }),
-);
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
+  title: {
+    flex: '1 1 100%',
+  },
+}));
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
@@ -163,7 +163,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     >
       {numSelected > 0 ? (
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
+          {numSelected}
+          {' '}
+          selected
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
@@ -193,30 +195,28 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-    },
-    paper: {
-      width: '100%',
-    },
-    table: {
-      minWidth: 750,
-    },
-    visuallyHidden: {
-      border: 0,
-      clip: 'rect(0 0 0 0)',
-      height: 1,
-      margin: -1,
-      overflow: 'hidden',
-      padding: 0,
-      position: 'absolute',
-      top: 20,
-      width: 1,
-    },
-  }),
-);
+const useStyles = makeStyles(() => createStyles({
+  root: {
+    width: '100%',
+  },
+  paper: {
+    width: '100%',
+  },
+  table: {
+    minWidth: 750,
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  },
+}));
 
 const FormView = () => {
   const classes = useStyles();
@@ -226,11 +226,11 @@ const FormView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const formList = useSelector((state: RootState) => state.formListReducer.formList);
-  const rows = formList.map( form => ({
+  const rows = formList.map((form) => ({
     ...form,
-    created: moment(form.created).format("LL"),
-    updated: moment(form.updated).format("LLL"),
-  }))
+    created: moment(form.created).format('LL'),
+    updated: moment(form.updated).format('LLL'),
+  }));
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof OmittedIForm) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -351,6 +351,15 @@ const FormView = () => {
       </Paper>
     </div>
   );
-}
+};
+export default FormView;
 
-export default FormView
+interface EnhancedTableProps {
+  classes: ReturnType<typeof useStyles>;
+  numSelected: number;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof OmittedIForm) => void;
+  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  order: Order;
+  orderBy: string;
+  rowCount: number;
+}

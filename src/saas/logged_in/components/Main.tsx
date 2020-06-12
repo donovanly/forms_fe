@@ -1,11 +1,13 @@
-import React, { memo, useState, Fragment, useEffect } from "react";
-import classNames from "classnames";
-import Routing from "./Routing";
-import NavBar from "./navigation/NavBar";
-import SideBar from "./navigation/SideBar";
+import React, {
+  memo, useState, useEffect,
+} from 'react';
+import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
-import { formListRequest } from "../../../state/ducks/formList";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
+import Routing from './Routing';
+import NavBar from './navigation/NavBar';
+import SideBar from './navigation/SideBar';
+import { formListRequest } from '../../../state/ducks/formList';
 
 interface ITarget {
   [index: number] :
@@ -49,18 +51,18 @@ interface IPost {
 const useStyles = makeStyles((theme) => ({
   main: {
     marginLeft: theme.spacing(25),
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down('xs')]: {
       marginLeft: 0,
     },
   },
-}))
+}));
 
 const Main = () => {
-  const classes = useStyles()
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -69,11 +71,11 @@ const Main = () => {
   };
 
   useEffect(() => {
-    dispatch(formListRequest())
-  }, [dispatch])
+    dispatch(formListRequest());
+  }, [dispatch]);
 
   return (
-    <Fragment>
+    <>
       <NavBar
         handleDrawerToggle={handleDrawerToggle}
       />
@@ -84,8 +86,8 @@ const Main = () => {
       <main className={classNames(classes.main)}>
         <Routing />
       </main>
-    </Fragment>
+    </>
   );
-}
+};
 
 export default memo(Main);
