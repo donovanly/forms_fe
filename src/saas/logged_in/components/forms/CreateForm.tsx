@@ -1,7 +1,4 @@
-import React, { useState } from "react"
-
-import FormPreview from "./FormPreview";
-import Grid from '@material-ui/core/Grid';
+import React, { useState, useCallback } from "react"
 import {
   Box,
   createStyles,
@@ -11,15 +8,17 @@ import {
   Stepper,
   Theme,
 } from "@material-ui/core";
+
 import clsx from 'clsx';
 import CreateIcon from '@material-ui/icons/Create';
 import FormBuilder from "./FormBuilder";
+import FormPreview from "./FormPreview";
+import Grid from '@material-ui/core/Grid';
 import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { RootState } from "../../../../state/root";
-import { saveFormRequest } from '../../../../state/ducks/form'
+import { v4 as uuid } from "uuid";
+import { DragDropContext, DropResult, DraggableLocation } from "react-beautiful-dnd";
 import { StepIconProps } from '@material-ui/core/StepIcon';
-import { useDispatch, useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -88,16 +87,61 @@ const ColorlibStepIcon = (props: StepIconProps) => {
   );
 }
 
+const reorder = (source: {id: string, type: string}[], startIndex: number, endIndex: number) => {
+  const [removed] = source.splice(startIndex, 1);
+  source.splice(endIndex, 0, removed);
+  return source;
+};
+
+const copy = (source: {id: string, type: string}[], destination: {id: string, type: string}[], droppableSource:  DraggableLocation, droppableDestination: DraggableLocation) => {
+  const item = source[droppableSource.index];
+  destination.splice(droppableDestination.index, 0, { ...item, id: uuid() });
+  return destination;
+};
+
+const elementTypes = [
+  {type: "Title", id: uuid()},
+  {type: "Short Text", id: uuid()},
+  {type: "Long Text", id: uuid()},
+  {type: "Dropdown", id: uuid()},
+  {type: "Auto Complete", id: uuid()},
+  {type: "Multiple Choice", id: uuid()},
+  {type: "Checkboxes", id: uuid()},
+]
+
 const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [formElements, setFormElements] = useState<{id: string, type: string}[]>([])
   const classes = useStyles()
-  const dispatch = useDispatch()
-  const name = useSelector((state: RootState) => state.formReducer.name)
-  const formElements = useSelector((state: RootState) => state.formReducer.formElements)
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
   };
+
+  const onDragEnd = useCallback((result: DropResult) => {
+    const { source, destination } = result
+
+    if (!destination) {
+      return;
+    }
+
+    switch (source.droppableId) {
+      case destination.droppableId:
+        setFormElements( state =>
+          reorder(state, source.index, destination.index)
+        )
+        break
+      case "FormElements":
+        setFormElements( state =>
+          copy(elementTypes, state, source, destination)
+        )
+        break
+      default:
+        break
+    }
+  },
+  [setFormElements]
+)
 
   return (
     <div className={classes.root}>
@@ -123,12 +167,14 @@ const CreateForm = () => {
             </Stepper>
           </Box>
         </Grid>
-        <Grid item xs={10} sm={6} className={classes.elementSelectorGrid}>
-          <FormBuilder />
-        </Grid>
-        <Grid item xs={10} sm={8} className={classes.formPreviewGrid}>
-          <FormPreview />
-        </Grid>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Grid item xs={10} sm={6} className={classes.elementSelectorGrid}>
+            <FormBuilder elementTypes={elementTypes} />
+          </Grid>
+          <Grid item xs={10} sm={8} className={classes.formPreviewGrid}>
+            <FormPreview items={formElements} />
+          </Grid>
+        </DragDropContext>
       </Grid>
     </div>
   )

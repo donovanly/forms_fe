@@ -2,6 +2,8 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core";
 
 // colors
 const primary = "#6CB9C2";
+const primaryDark = "#4b8187";
+const primaryLight = "#89c7ce";
 const secondary = "#B13D56";
 const black = "#343a40";
 const darkBlack = "rgb(36, 40, 44)";
@@ -26,7 +28,7 @@ const spacing = 8;
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: primary },
+    primary: { main: primary, dark: primaryDark, light: primaryLight },
     secondary: { main: secondary },
     common: {
       black,
