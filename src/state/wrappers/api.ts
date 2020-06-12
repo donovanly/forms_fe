@@ -19,12 +19,16 @@ interface APIParameters {
 export default function apiClient({
   url, method, errorAction, successAction, data, headers,
 }: APIParameters) {
-  const authToken = JSON.parse(localStorage.getItem('persist:authReducer') || '');
+  const authReducer = JSON.parse(localStorage.getItem('persist:authReducer') || '');
+  let authDict = {access_token: ''};
+  if ('auth' in authReducer) {
+    authDict = JSON.parse(authReducer.auth);
+  }
   return from(instance.request({
     data,
     headers: {
       ...headers,
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${authDict.access_token}`,
     },
     method,
     url,
