@@ -1,8 +1,8 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from "@material-ui/core/TextField";
-import { Control, Controller } from "react-hook-form";
+import TextField from '@material-ui/core/TextField';
+import { Control, Controller } from 'react-hook-form';
 
 interface IRenderOptions {
   [key: string]: ReactNode
@@ -14,22 +14,23 @@ interface IProps {
   name: string,
   options: string[],
   renderOptions: IRenderOptions,
-  variant: "filled" | "outlined" | "standard" | undefined
+  variant: 'filled' | 'outlined' | 'standard' | undefined
 }
-
 
 // Default value is always the first option
 const ControlledAutoComplete = (props: IProps) => {
-  const { control, label, name, options, renderOptions, variant } = props  
+  const {
+    control, label, name, options, renderOptions, variant,
+  } = props;
 
   return (
     <Controller
-      as={
+      as={(
         <Autocomplete
           getOptionSelected={(option, value) => option === value}
           options={options}
-          renderOption={option => renderOptions[option] ? renderOptions[option] : option}
-          renderInput={params => (
+          renderOption={(option) => (renderOptions[option] ? renderOptions[option] : option)}
+          renderInput={(params) => (
             <TextField
               {...params}
               InputLabelProps={{
@@ -41,12 +42,12 @@ const ControlledAutoComplete = (props: IProps) => {
             />
           )}
         />
-      }
+      )}
       control={control}
       name={name}
       onChange={([, data]) => data}
     />
   );
-}
+};
 
-export default ControlledAutoComplete
+export default ControlledAutoComplete;
