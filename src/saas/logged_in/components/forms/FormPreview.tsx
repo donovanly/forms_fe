@@ -71,9 +71,9 @@ const FormPreview = (props: {items: {id: string, type: string}[]}) => {
       <Divider />
       <Droppable droppableId="FormPreview">
         {(provided, snapshot) => (
-          <List innerRef={provided.innerRef}>
-            {items.length ? items.map((item, index) => (
-              <>
+          <>
+            <List innerRef={provided.innerRef}>
+              {items.length ? items.map((item, index) => (
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(dProvided, dSnapshot) => (
                     <ListItem
@@ -92,20 +92,20 @@ const FormPreview = (props: {items: {id: string, type: string}[]}) => {
                     </ListItem>
                   )}
                 </Draggable>
-                {provided.placeholder}
-              </>
-            )) : (
-              <div
-                className={
+              )) : (
+                <div
+                  className={
                   snapshot.isDraggingOver
                     ? classes.placeholderDrag
                     : classes.placeholder
                 }
-              >
-                {!snapshot.isDraggingOver && 'Drop Form Elements Here'}
-              </div>
-            )}
-          </List>
+                >
+                  {!snapshot.isDraggingOver && 'Drop Form Elements Here'}
+                </div>
+              )}
+            </List>
+            {items.length ? provided.placeholder : null}
+          </>
         )}
       </Droppable>
     </Paper>
