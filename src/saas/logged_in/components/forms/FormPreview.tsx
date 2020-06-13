@@ -13,10 +13,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
-import {
-  Droppable, Draggable,
-} from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { FormElement } from '../../../../state/ducks/form';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -59,8 +57,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const FormPreview = (props: {items: {id: string, type: string}[]}) => {
-  const { items } = props;
+interface IProps {
+  formElements: FormElement[]
+}
+
+const FormPreview = (props:IProps) => {
+  const { formElements } = props;
   const classes = useStyles();
 
   return (
@@ -73,7 +75,7 @@ const FormPreview = (props: {items: {id: string, type: string}[]}) => {
         {(provided, snapshot) => (
           <>
             <List innerRef={provided.innerRef}>
-              {items.length ? items.map((item, index) => (
+              {formElements.length ? formElements.map((item, index) => (
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(dProvided, dSnapshot) => (
                     <ListItem
@@ -104,7 +106,7 @@ const FormPreview = (props: {items: {id: string, type: string}[]}) => {
                 </div>
               )}
             </List>
-            {items.length ? provided.placeholder : null}
+            {formElements.length ? provided.placeholder : null}
           </>
         )}
       </Droppable>

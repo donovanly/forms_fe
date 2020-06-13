@@ -26,6 +26,7 @@ import {
   DraggableRubric,
   DraggableStateSnapshot,
 } from 'react-beautiful-dnd';
+import { FormElement } from '../../../../state/ducks/form';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   formControl: {
@@ -75,12 +76,12 @@ const elementIcon = (elementType: string) => {
   }
 };
 
-const getRenderItem = (elementTypes: {id: string, type: string}[]) => (
+const getRenderItem = (formElements: FormElement[]) => (
   provided: DraggableProvided,
   snapshot: DraggableStateSnapshot,
   rubric: DraggableRubric,
 ) => {
-  const element = elementTypes[rubric.source.index];
+  const element = formElements[rubric.source.index];
   const classes = useStyles();
   return (
     <ListItem
@@ -100,9 +101,9 @@ const getRenderItem = (elementTypes: {id: string, type: string}[]) => (
   );
 };
 
-const FormBuilder = (props: {elementTypes: {id: string, type: string}[]}) => {
+const FormBuilder = (props: {formElements: FormElement[]}) => {
   const classes = useStyles();
-  const { elementTypes } = props;
+  const { formElements } = props;
 
   return (
     <Paper className={classes.paper}>
@@ -110,10 +111,10 @@ const FormBuilder = (props: {elementTypes: {id: string, type: string}[]}) => {
         Form Elements
       </Typography>
       <Divider />
-      <Droppable droppableId="FormElements" isDropDisabled renderClone={getRenderItem(elementTypes)}>
+      <Droppable droppableId="FormElements" isDropDisabled renderClone={getRenderItem(formElements)}>
         {(provided, snapshot) => (
           <List innerRef={provided.innerRef}>
-            {elementTypes.map((element, index) => {
+            {formElements.map((element, index) => {
               const shouldRenderClone = element.id === snapshot.draggingFromThisWith;
               return (
                 <Fragment key={element.id}>

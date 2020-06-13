@@ -10,14 +10,15 @@ import apiClient from '../wrappers/api';
 export const titleTypes = ['body1', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'caption'];
 
 export interface FormElement {
-  questionOptions: {
+  created?: string,
+  id: string,
+  label: string,
+  questionOptions?: {
     label: string,
   }[],
   required: boolean,
-  label: string,
   titleType?: 'body1' | 'caption' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
   type: string,
-  created?: string,
   updated?: string,
 }
 

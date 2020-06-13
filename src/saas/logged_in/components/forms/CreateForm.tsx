@@ -18,6 +18,7 @@ import { DragDropContext, DropResult, DraggableLocation } from 'react-beautiful-
 import { StepIconProps } from '@material-ui/core/StepIcon';
 import FormPreview from './FormPreview';
 import FormBuilder from './FormBuilder';
+import { FormElement } from '../../../../state/ducks/form';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -85,36 +86,51 @@ const ColorlibStepIcon = (props: StepIconProps) => {
   );
 };
 
-const elementTypes = [
-  { type: 'Title', id: uuid() },
-  { type: 'Short Text', id: uuid() },
-  { type: 'Long Text', id: uuid() },
-  { type: 'Dropdown', id: uuid() },
-  { type: 'Auto Complete', id: uuid() },
-  { type: 'Multiple Choice', id: uuid() },
-  { type: 'Checkboxes', id: uuid() },
+const availableFormElements = [
+  {
+    type: 'Title', id: uuid(), required: false, label: '',
+  },
+  {
+    type: 'Short Text', id: uuid(), required: false, label: '',
+  },
+  {
+    type: 'Long Text', id: uuid(), required: false, label: '',
+  },
+  {
+    type: 'Dropdown', id: uuid(), required: false, label: '',
+  },
+  {
+    type: 'Auto Complete', id: uuid(), required: false, label: '',
+  },
+  {
+    type: 'Multiple Choice', id: uuid(), required: false, label: '',
+  },
+  {
+    type: 'Checkboxes', id: uuid(), required: false, label: '',
+  },
 ];
 
-const reorder = (source: typeof elementTypes, startIndex: number, endIndex: number) => {
+const reorder = (source: FormElement[], startIndex: number, endIndex: number) => {
   const [removed] = source.splice(startIndex, 1);
   source.splice(endIndex, 0, removed);
   return source;
 };
 
 const copy = (
-  source: typeof elementTypes,
-  destination: typeof elementTypes,
+  source: FormElement[],
+  destination: FormElement[],
   droppableSource: DraggableLocation,
   droppableDestination: DraggableLocation,
 ) => {
-  const item = source[droppableSource.index];
-  destination.splice(droppableDestination.index, 0, { ...item, id: uuid() });
+  const elementType = source[droppableSource.index];
+
+  destination.splice(droppableDestination.index, 0, { ...elementType, id: uuid() });
   return destination;
 };
 
 const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [formElements, setFormElements] = useState<typeof elementTypes>([]);
+  const [formElements, setFormElements] = useState<FormElement[]>([]);
   const classes = useStyles();
 
   const handleStep = (step: number) => () => {
@@ -133,7 +149,7 @@ const CreateForm = () => {
         setFormElements((state) => reorder(state, source.index, destination.index));
         break;
       case 'FormElements':
-        setFormElements((state) => copy(elementTypes, state, source, destination));
+        setFormElements((state) => copy(availableFormElements, state, source, destination));
         break;
       default:
         break;
@@ -167,10 +183,10 @@ const CreateForm = () => {
         </Grid>
         <DragDropContext onDragEnd={onDragEnd}>
           <Grid item xs={10} sm={6} className={classes.elementSelectorGrid}>
-            <FormBuilder elementTypes={elementTypes} />
+            <FormBuilder formElements={availableFormElements} />
           </Grid>
           <Grid item xs={10} sm={8} className={classes.formPreviewGrid}>
-            <FormPreview items={formElements} />
+            <FormPreview formElements={formElements} />
           </Grid>
         </DragDropContext>
       </Grid>
