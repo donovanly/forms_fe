@@ -85,29 +85,6 @@ const ColorlibStepIcon = (props: StepIconProps) => {
   );
 };
 
-const reorder = (source: {id: string, type: string}[], startIndex: number, endIndex: number) => {
-  const [removed] = source.splice(startIndex, 1);
-  source.splice(endIndex, 0, removed);
-  return source;
-};
-
-const copy = (
-  source: {
-    id: string,
-    type: string
-  }[],
-  destination: {
-    id: string,
-    type: string
-  }[],
-  droppableSource: DraggableLocation,
-  droppableDestination: DraggableLocation,
-) => {
-  const item = source[droppableSource.index];
-  destination.splice(droppableDestination.index, 0, { ...item, id: uuid() });
-  return destination;
-};
-
 const elementTypes = [
   { type: 'Title', id: uuid() },
   { type: 'Short Text', id: uuid() },
@@ -118,9 +95,26 @@ const elementTypes = [
   { type: 'Checkboxes', id: uuid() },
 ];
 
+const reorder = (source: typeof elementTypes, startIndex: number, endIndex: number) => {
+  const [removed] = source.splice(startIndex, 1);
+  source.splice(endIndex, 0, removed);
+  return source;
+};
+
+const copy = (
+  source: typeof elementTypes,
+  destination: typeof elementTypes,
+  droppableSource: DraggableLocation,
+  droppableDestination: DraggableLocation,
+) => {
+  const item = source[droppableSource.index];
+  destination.splice(droppableDestination.index, 0, { ...item, id: uuid() });
+  return destination;
+};
+
 const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [formElements, setFormElements] = useState<{id: string, type: string}[]>([]);
+  const [formElements, setFormElements] = useState<typeof elementTypes>([]);
   const classes = useStyles();
 
   const handleStep = (step: number) => () => {
