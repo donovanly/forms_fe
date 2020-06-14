@@ -16,9 +16,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { v4 as uuid } from 'uuid';
 import { DragDropContext, DropResult, DraggableLocation } from 'react-beautiful-dnd';
 import { StepIconProps } from '@material-ui/core/StepIcon';
+import { useDispatch, useSelector } from 'react-redux';
 import FormPreview from './FormPreview';
 import FormBuilder from './FormBuilder';
-import { FormElement } from '../../../../state/ducks/form';
+import { FormElement, setFormElements } from '../../../../state/ducks/form';
+import { RootState } from '../../../../state/root';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -137,9 +139,10 @@ const availableFormElements = [
 ] as FormElement[];
 
 const reorder = (source: FormElement[], startIndex: number, endIndex: number) => {
-  const [removed] = source.splice(startIndex, 1);
-  source.splice(endIndex, 0, removed);
-  return source;
+  const sourceClone = source.slice();
+  const [removed] = sourceClone.splice(startIndex, 1);
+  sourceClone.splice(endIndex, 0, removed);
+  return sourceClone;
 };
 
 const copy = (
@@ -149,14 +152,16 @@ const copy = (
   droppableDestination: DraggableLocation,
 ) => {
   const elementType = source[droppableSource.index];
+  const destinationClone = destination.slice();
 
-  destination.splice(droppableDestination.index, 0, { ...elementType, id: uuid() });
-  return destination;
+  destinationClone.splice(droppableDestination.index, 0, { ...elementType, id: uuid() });
+  return destinationClone;
 };
 
 const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [formElements, setFormElements] = useState<FormElement[]>([]);
+  const formElements = useSelector((state: RootState) => state.formReducer.formElements);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const handleStep = (step: number) => () => {
@@ -172,16 +177,16 @@ const CreateForm = () => {
 
     switch (source.droppableId) {
       case destination.droppableId:
-        setFormElements((state) => reorder(state, source.index, destination.index));
+        dispatch(setFormElements(reorder(formElements, source.index, destination.index)));
         break;
       case 'FormElements':
-        setFormElements((state) => copy(availableFormElements, state, source, destination));
+        dispatch(setFormElements(copy(availableFormElements, formElements, source, destination)));
         break;
       default:
         break;
     }
   },
-  [setFormElements]);
+  [dispatch, formElements]);
 
   return (
     <div className={classes.root}>
@@ -212,7 +217,7 @@ const CreateForm = () => {
             <FormBuilder formElements={availableFormElements} />
           </Grid>
           <Grid item xs={10} sm={8} className={classes.formPreviewGrid}>
-            <FormPreview formElements={formElements} />
+            <FormPreview />
           </Grid>
         </DragDropContext>
       </Grid>

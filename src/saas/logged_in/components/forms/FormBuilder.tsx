@@ -26,7 +26,9 @@ import {
   DraggableRubric,
   DraggableStateSnapshot,
 } from 'react-beautiful-dnd';
-import { FormElement } from '../../../../state/ducks/form';
+import { useDispatch } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+import { addElement, FormElement } from '../../../../state/ducks/form';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   formControl: {
@@ -103,7 +105,13 @@ const getRenderItem = (formElements: FormElement[]) => (
 
 const FormBuilder = (props: {formElements: FormElement[]}) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { formElements } = props;
+
+  const addElementHandler = (index: number) => {
+    const elementType = formElements[index];
+    dispatch(addElement({ ...elementType, id: uuid() }));
+  };
 
   return (
     <Paper className={classes.paper}>
@@ -139,6 +147,7 @@ const FormBuilder = (props: {formElements: FormElement[]}) => {
                           {...dProvided.dragHandleProps}
                           {...dProvided.draggableProps}
                           innerRef={dProvided.innerRef}
+                          onClick={() => addElementHandler(index)}
                         >
                           <ListItemIcon>
                             {elementIcon(element.type)}

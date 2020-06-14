@@ -51,6 +51,10 @@ export const formSlice = createSlice({
       ...state,
       formElements: [...state.formElements, action.payload],
     }),
+    setFormElements: (state, action) => ({
+      ...state,
+      formElements: action.payload,
+    }),
     saveFormRequest: (state, action) => ({
       ...state,
       isLoading: false,
@@ -60,7 +64,7 @@ export const formSlice = createSlice({
   },
 });
 
-export const { addElement, saveFormRequest } = formSlice.actions;
+export const { addElement, saveFormRequest, setFormElements } = formSlice.actions;
 export const formReducer = formSlice.reducer;
 
 export const formEpic:

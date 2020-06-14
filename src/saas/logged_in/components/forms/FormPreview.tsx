@@ -14,8 +14,10 @@ import List from '@material-ui/core/List';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { FormElement } from '../../../../state/ducks/form';
+import { useDispatch, useSelector } from 'react-redux';
 import RenderPreview from './RenderPreview';
+import { RootState } from '../../../../state/root';
+import { setFormElements } from '../../../../state/ducks/form';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -76,13 +78,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-interface IProps {
-  formElements: FormElement[]
-}
-
-const FormPreview = (props:IProps) => {
-  const { formElements } = props;
+const FormPreview = () => {
+  const formElements = useSelector((state: RootState) => state.formReducer.formElements);
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const deleteElementHandler = (index: number) => {
+    const formElementsClone = formElements.slice();
+    formElementsClone.splice(index, 1);
+    dispatch(setFormElements(formElementsClone));
+  };
 
   return (
     <Paper className={classes.paper}>
@@ -109,7 +114,7 @@ const FormPreview = (props:IProps) => {
                         <IconButton className={classes.iconButton}>
                           <MoreVertIcon />
                         </IconButton>
-                        <IconButton className={classes.iconButton}>
+                        <IconButton className={classes.iconButton} onClick={() => deleteElementHandler(index)}>
                           <DeleteIcon className={classes.deleteIcon} />
                         </IconButton>
                       </div>

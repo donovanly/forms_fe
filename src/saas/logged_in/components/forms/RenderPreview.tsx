@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => createStyles({
   formControl: {
     marginBottom: '10px',
     marginTop: '10px',
-    width: '97.5%',
+    width: '95%',
   },
   textFieldLabel: {
     fontSize: '16px',
