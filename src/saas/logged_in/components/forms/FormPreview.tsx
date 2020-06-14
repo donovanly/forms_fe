@@ -8,13 +8,14 @@ import {
   Paper,
   Theme,
   Typography,
+  IconButton,
 } from '@material-ui/core';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import DeleteIcon from '@material-ui/icons/Delete';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { FormElement } from '../../../../state/ducks/form';
+import RenderPreview from './RenderPreview';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -26,10 +27,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   listItem: {
     '&:hover': {
       background: theme.palette.primary.light,
+      borderRadius: '10px',
     },
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
   draggingListItem: {
     background: theme.palette.primary.light,
+    borderRadius: '10px',
+    paddingLeft: '10px',
+    paddingRight: '10px',
   },
   placeholder: {
     alignContent: 'center',
@@ -55,6 +62,18 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     padding: '0.5rem',
     margin: '0 0.5rem 0.5rem',
   },
+  questionIconContainer: {
+    position: 'absolute',
+    right: '0',
+    zIndex: 1,
+  },
+  iconButton: {
+    display: 'block',
+    padding: '5px',
+  },
+  deleteIcon: {
+    color: theme.palette.secondary.main,
+  },
 }));
 
 interface IProps {
@@ -75,23 +94,29 @@ const FormPreview = (props:IProps) => {
         {(provided, snapshot) => (
           <>
             <List innerRef={provided.innerRef}>
-              {formElements.length ? formElements.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(dProvided, dSnapshot) => (
-                    <ListItem
-                      button
-                      className={dSnapshot.isDragging ? classes.draggingListItem : classes.listItem}
+              {formElements.length ? formElements.map((formElement, index) => (
+                <Draggable key={formElement.id} draggableId={formElement.id} index={index}>
+                  {(dProvided, dSnapShot) => (
+                    <div
                       {...dProvided.dragHandleProps}
                       {...dProvided.draggableProps}
-                      innerRef={dProvided.innerRef}
+                      className={dSnapShot.isDragging
+                        ? classes.draggingListItem
+                        : classes.listItem}
+                      ref={dProvided.innerRef}
                     >
-                      <ListItemIcon>
-                        Text Icon
-                        {' '}
-                        {item.id}
-                      </ListItemIcon>
-                      <ListItemText primary="Title" />
-                    </ListItem>
+                      <div className={classes.questionIconContainer}>
+                        <IconButton className={classes.iconButton}>
+                          <MoreVertIcon />
+                        </IconButton>
+                        <IconButton className={classes.iconButton}>
+                          <DeleteIcon className={classes.deleteIcon} />
+                        </IconButton>
+                      </div>
+                      <RenderPreview
+                        questionSettings={formElement}
+                      />
+                    </div>
                   )}
                 </Draggable>
               )) : (

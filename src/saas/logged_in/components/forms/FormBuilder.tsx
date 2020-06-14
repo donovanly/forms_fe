@@ -42,11 +42,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   listItem: {
     '&:hover': {
-      background: theme.palette.primary.light,
+      background: theme.palette.primary.main,
     },
   },
   draggingListItem: {
-    background: theme.palette.primary.light,
+    background: theme.palette.primary.main,
   },
   listItemCopy: {
     '& ~ div': {

@@ -1,32 +1,48 @@
 import React from 'react';
 
 import {
+  Box,
+  Checkbox,
+  createStyles,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   FormHelperText,
   FormLabel,
   InputLabel,
+  makeStyles,
   MenuItem,
   Radio,
   RadioGroup,
   Select,
   TextField,
-  FormControlLabel,
-  FormGroup,
-  Checkbox,
   Typography,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { FormElement } from '../../../../state/ducks/form';
 
+const useStyles = makeStyles(() => createStyles({
+  formControl: {
+    marginBottom: '10px',
+    marginTop: '10px',
+    width: '97.5%',
+  },
+  textFieldLabel: {
+    fontSize: '16px',
+  },
+}));
+
 export default function RenderPreview(props: {questionSettings: FormElement}) {
   const { questionSettings } = props;
+  const classes = useStyles();
 
   switch (questionSettings.type) {
     case 'Short Text':
       return (
-        <FormControl style={{ marginBottom: '10px', marginTop: '10px' }} fullWidth>
+        <FormControl className={classes.formControl}>
           <TextField
             InputLabelProps={{
+              className: classes.textFieldLabel,
               required: questionSettings.required,
               shrink: true,
             }}
@@ -34,14 +50,16 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
             error={questionSettings.required}
             label={questionSettings.label}
           />
-          {questionSettings.required && <FormHelperText error>This field is required.</FormHelperText>}
+          {questionSettings.required
+          && <FormHelperText error>This field is required.</FormHelperText>}
         </FormControl>
       );
     case 'Long Text':
       return (
-        <FormControl style={{ marginBottom: '10px', marginTop: '10px' }} fullWidth>
+        <FormControl className={classes.formControl}>
           <TextField
             InputLabelProps={{
+              className: classes.textFieldLabel,
               required: questionSettings.required,
               shrink: true,
             }}
@@ -51,12 +69,13 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
             multiline
             rows={3}
           />
-          {questionSettings.required && <FormHelperText error>This field is required.</FormHelperText>}
+          {questionSettings.required
+          && <FormHelperText error>This field is required.</FormHelperText>}
         </FormControl>
       );
     case 'Dropdown':
       return (
-        <FormControl style={{ marginBottom: '10px', marginTop: '10px' }} fullWidth>
+        <FormControl className={classes.formControl}>
           <InputLabel
             error={questionSettings.required}
             id="standard-dropdown"
@@ -72,24 +91,27 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
             labelId="standard-dropdown"
           >
             <MenuItem value="">None</MenuItem>
-            {questionSettings.questionOptions ? questionSettings.questionOptions.map((option, index) => (
-              <MenuItem
-                key={index}
-                value={option.label}
-              >
-                {option.label}
-              </MenuItem>
-            )) : <MenuItem value="Option 1">Option 1</MenuItem>}
+            {questionSettings.questionOptions
+              ? questionSettings.questionOptions.map((option, index) => (
+                <MenuItem
+                  key={index}
+                  value={option.label}
+                >
+                  {option.label}
+                </MenuItem>
+              )) : <MenuItem value="Option 1">Option 1</MenuItem>}
           </Select>
-          {questionSettings.required && <FormHelperText error>This field is required.</FormHelperText>}
+          {questionSettings.required
+          && <FormHelperText error>This field is required.</FormHelperText>}
         </FormControl>
       );
     case 'Multiple Choice':
       return (
-        <FormControl style={{ marginBottom: '10px', marginTop: '10px' }} fullWidth>
-          <FormLabel component="legend">{questionSettings.label}</FormLabel>
+        <FormControl className={classes.formControl}>
+          <FormLabel style={{ fontSize: '12px' }}>{questionSettings.label}</FormLabel>
           <RadioGroup defaultValue="Option 1">
-            {questionSettings.questionOptions && questionSettings.questionOptions.map((option, index) => (
+            {questionSettings.questionOptions
+            && questionSettings.questionOptions.map((option, index) => (
               <FormControlLabel
                 control={<Radio />}
                 key={index}
@@ -102,24 +124,26 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
       );
     case 'Checkboxes':
       return (
-        <FormControl style={{ marginBottom: '10px', marginTop: '10px' }} fullWidth>
-          <FormLabel>{questionSettings.label}</FormLabel>
+        <FormControl className={classes.formControl}>
+          <FormLabel style={{ fontSize: '12px' }}>{questionSettings.label}</FormLabel>
           <FormGroup>
-            {questionSettings.questionOptions ? questionSettings.questionOptions.map((option, index) => (
-              <FormControlLabel
-                control={<Checkbox />}
-                key={index}
-                label={option.label}
-                value={option.label}
-              />
-            )) : <FormControlLabel control={<Checkbox />} label="Option 1" />}
+            {questionSettings.questionOptions
+              ? questionSettings.questionOptions.map((option, index) => (
+                <FormControlLabel
+                  control={<Checkbox />}
+                  key={index}
+                  label={option.label}
+                  value={option.label}
+                />
+              )) : <FormControlLabel control={<Checkbox />} label="Option 1" />}
           </FormGroup>
         </FormControl>
       );
     case 'Auto Complete':
       return (
-        <FormControl style={{ marginBottom: '10px', marginTop: '10px' }} fullWidth>
+        <FormControl className={classes.formControl}>
           <Autocomplete
+            autoHighlight
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -129,19 +153,21 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
                 }}
                 error={questionSettings.required}
                 label={questionSettings.label}
-                variant="outlined"
               />
             )}
             options={questionSettings.questionOptions ? questionSettings.questionOptions.map((option) => option.label) : ['Option 1']}
           />
-          {questionSettings.required && <FormHelperText error>This field is required.</FormHelperText>}
+          {questionSettings.required
+          && <FormHelperText error>This field is required.</FormHelperText>}
         </FormControl>
       );
     case 'Title':
       return (
-        <Typography variant={questionSettings.titleType}>
-          {questionSettings.label}
-        </Typography>
+        <Box height="68px">
+          <Typography variant={questionSettings.titleType}>
+            {questionSettings.label}
+          </Typography>
+        </Box>
       );
     default:
       return <div>None</div>;

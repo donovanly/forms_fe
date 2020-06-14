@@ -88,27 +88,53 @@ const ColorlibStepIcon = (props: StepIconProps) => {
 
 const availableFormElements = [
   {
-    type: 'Title', id: uuid(), required: false, label: '',
+    type: 'Title',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    titleType: 'h6',
   },
   {
-    type: 'Short Text', id: uuid(), required: false, label: '',
+    type: 'Short Text',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
   },
   {
-    type: 'Long Text', id: uuid(), required: false, label: '',
+    type: 'Long Text',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
   },
   {
-    type: 'Dropdown', id: uuid(), required: false, label: '',
+    type: 'Dropdown',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
   },
   {
-    type: 'Auto Complete', id: uuid(), required: false, label: '',
+    type: 'Auto Complete',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
   },
   {
-    type: 'Multiple Choice', id: uuid(), required: false, label: '',
+    type: 'Multiple Choice',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
   },
   {
-    type: 'Checkboxes', id: uuid(), required: false, label: '',
+    type: 'Checkboxes',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
   },
-];
+] as FormElement[];
 
 const reorder = (source: FormElement[], startIndex: number, endIndex: number) => {
   const [removed] = source.splice(startIndex, 1);

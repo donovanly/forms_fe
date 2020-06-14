@@ -27,6 +27,7 @@ const ControlledAutoComplete = (props: IProps) => {
     <Controller
       as={(
         <Autocomplete
+          autoHighlight
           getOptionSelected={(option, value) => option === value}
           options={options}
           renderOption={(option) => (renderOptions[option] ? renderOptions[option] : option)}
