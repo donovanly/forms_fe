@@ -81,6 +81,6 @@ export const formEpic:
         method: 'POST',
         errorAction: formSlice.actions.saveFormFailure,
         successAction: formSlice.actions.saveFormSuccess,
-      });
+      }, store);
     }),
   );

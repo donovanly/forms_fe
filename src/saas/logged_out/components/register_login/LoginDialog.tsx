@@ -1,5 +1,7 @@
-import React, { useState, useCallback, useRef, Fragment } from "react";
-import classNames from "classnames";
+import React, {
+  useState, useCallback, useRef,
+} from 'react';
+import classNames from 'classnames';
 import {
   Button,
   Checkbox,
@@ -7,14 +9,14 @@ import {
   makeStyles,
   TextField,
   Typography,
-} from "@material-ui/core";
-import FormDialog from "../../../shared/components/FormDialog";
-import HighlightedInformation from "../../../shared/components/HighlightedInformation";
-import ButtonCircularProgress from "../../../shared/components/ButtonCircularProgress";
-import VisibilityPasswordTextField from "../../../shared/components/VisibilityPasswordTextField";
-import { useDispatch, useSelector } from 'react-redux'
-import { loginRequest } from "../../../../state/ducks/auth"
-import { RootState } from "../../../../state/root"
+} from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import FormDialog from '../../../shared/components/FormDialog';
+import HighlightedInformation from '../../../shared/components/HighlightedInformation';
+import ButtonCircularProgress from '../../../shared/components/ButtonCircularProgress';
+import VisibilityPasswordTextField from '../../../shared/components/VisibilityPasswordTextField';
+import { loginRequest } from '../../../../state/ducks/auth';
+import { RootState } from '../../../../state/root';
 
 interface IProps {
   classes: any,
@@ -28,22 +30,22 @@ const useStyles = makeStyles((theme) => ({
   forgotPassword: {
     marginTop: theme.spacing(2),
     color: theme.palette.primary.main,
-    cursor: "pointer",
-    "&:enabled:hover": {
+    cursor: 'pointer',
+    '&:enabled:hover': {
       color: theme.palette.primary.dark,
     },
-    "&:enabled:focus": {
+    '&:enabled:focus': {
       color: theme.palette.primary.dark,
     },
   },
   disabledText: {
-    cursor: "auto",
+    cursor: 'auto',
     color: theme.palette.text.disabled,
   },
   formControlLabel: {
     marginRight: 0,
   },
-}))
+}));
 
 const LoginDialog = (props: IProps) => {
   const {
@@ -52,9 +54,9 @@ const LoginDialog = (props: IProps) => {
     setStatus,
     status,
   } = props;
-  const classes = useStyles()
-  const isLoading = useSelector((state: RootState) => state.authReducer.isLoading)
-  const dispatch = useDispatch()
+  const classes = useStyles();
+  const isLoading = useSelector((state: RootState) => state.authReducer.isLoading);
+  const dispatch = useDispatch();
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const loginEmail = useRef<HTMLDivElement>(null);
@@ -64,13 +66,13 @@ const LoginDialog = (props: IProps) => {
     if (loginEmail && loginEmail.current && loginPassword && loginPassword.current) {
       dispatch(loginRequest({
         username: (loginEmail.current as HTMLInputElement).value,
-        password: (loginPassword.current as HTMLInputElement).value
-      }))
+        password: (loginPassword.current as HTMLInputElement).value,
+      }));
     }
   }, [loginEmail, loginPassword, dispatch]);
 
   return (
-    <Fragment>
+    <>
       <FormDialog
         open
         onClose={onClose}
@@ -81,12 +83,12 @@ const LoginDialog = (props: IProps) => {
         }}
         hideBackdrop
         headline="Login"
-        content={
-          <Fragment>
+        content={(
+          <>
             <TextField
               variant="outlined"
               margin="normal"
-              error={status === "invalidEmail"}
+              error={status === 'invalidEmail'}
               required
               fullWidth
               label="Email Address"
@@ -95,13 +97,13 @@ const LoginDialog = (props: IProps) => {
               autoComplete="off"
               type="email"
               onChange={() => {
-                if (status === "invalidEmail") {
+                if (status === 'invalidEmail') {
                   setStatus(null);
                 }
               }}
               helperText={
-                status === "invalidEmail" &&
-                "This email address isn't associated with an account."
+                status === 'invalidEmail'
+                && "This email address isn't associated with an account."
               }
               FormHelperTextProps={{ error: true }}
             />
@@ -110,20 +112,23 @@ const LoginDialog = (props: IProps) => {
               margin="normal"
               required
               fullWidth
-              error={status === "invalidPassword"}
+              error={status === 'invalidPassword'}
               label="Password"
               inputRef={loginPassword}
               autoComplete="off"
               onChange={() => {
-                if (status === "invalidPassword") {
+                if (status === 'invalidPassword') {
                   setStatus(null);
                 }
               }}
               helperText={
-                status === "invalidPassword" && (
+                status === 'invalidPassword' && (
                   <span>
-                    Incorrect password. Try again, or click on{" "}
-                    <b>&quot;Forgot Password?&quot;</b> to reset it.
+                    Incorrect password. Try again, or click on
+                    {' '}
+                    <b>&quot;Forgot Password?&quot;</b>
+                    {' '}
+                    to reset it.
                   </span>
                 )
               }
@@ -131,21 +136,16 @@ const LoginDialog = (props: IProps) => {
               onVisibilityChange={setIsPasswordVisible}
               isVisible={isPasswordVisible}
             />
-            <FormControlLabel
-              className={classes.formControlLabel}
-              control={<Checkbox color="primary" />}
-              label={<Typography variant="body1">Remember me</Typography>}
-            />
-            {status === "verificationEmailSend" && (
+            {status === 'verificationEmailSend' && (
               <HighlightedInformation>
                 We have send instructions on how to reset your password to your
                 email address
               </HighlightedInformation>
             )}
-          </Fragment>
-        }
-        actions={
-          <Fragment>
+          </>
+        )}
+        actions={(
+          <>
             <Button
               type="submit"
               fullWidth
@@ -161,7 +161,7 @@ const LoginDialog = (props: IProps) => {
               align="center"
               className={classNames(
                 classes.forgotPassword,
-                isLoading ? classes.disabledText : null
+                isLoading ? classes.disabledText : null,
               )}
               color="primary"
               onClick={() => !isLoading && openChangePasswordDialog()}
@@ -170,8 +170,8 @@ const LoginDialog = (props: IProps) => {
               onKeyDown={(event) => {
                 // For screenreaders listen to space and enter events
                 if (
-                  (!isLoading && event.keyCode === 13) ||
-                  event.keyCode === 32
+                  (!isLoading && event.keyCode === 13)
+                  || event.keyCode === 32
                 ) {
                   openChangePasswordDialog();
                 }
@@ -179,11 +179,11 @@ const LoginDialog = (props: IProps) => {
             >
               Forgot Password?
             </Typography>
-          </Fragment>
-        }
+          </>
+        )}
       />
-    </Fragment>
+    </>
   );
-}
+};
 
 export default LoginDialog;

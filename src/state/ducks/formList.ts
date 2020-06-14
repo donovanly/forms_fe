@@ -40,5 +40,5 @@ export const getFormListEpic:
       method: 'GET',
       errorAction: formListSlice.actions.formListFailure,
       successAction: formListSlice.actions.formListSuccess,
-    })),
+    }, store)),
   );
