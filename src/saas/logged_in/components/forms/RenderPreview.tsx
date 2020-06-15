@@ -113,7 +113,7 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
             {questionSettings.questionOptions
             && questionSettings.questionOptions.map((option, index) => (
               <FormControlLabel
-                control={<Radio />}
+                control={<Radio size='small' />}
                 key={index}
                 label={option.label}
                 value={option.label}
@@ -130,7 +130,7 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
             {questionSettings.questionOptions
               ? questionSettings.questionOptions.map((option, index) => (
                 <FormControlLabel
-                  control={<Checkbox />}
+                  control={<Checkbox size='small' />}
                   key={index}
                   label={option.label}
                   value={option.label}

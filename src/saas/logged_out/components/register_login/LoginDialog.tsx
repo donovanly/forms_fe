@@ -4,8 +4,6 @@ import React, {
 import classNames from 'classnames';
 import {
   Button,
-  Checkbox,
-  FormControlLabel,
   makeStyles,
   TextField,
   Typography,

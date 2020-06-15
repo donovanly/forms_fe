@@ -1,23 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   createStyles,
   Divider,
+  Grid,
+  IconButton,
   makeStyles,
   Paper,
   Theme,
   Typography,
-  IconButton,
 } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import DeleteIcon from '@material-ui/icons/Delete';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import RenderPreview from './RenderPreview';
 import { RootState } from '../../../../state/root';
 import { setFormElements } from '../../../../state/ducks/form';
+import ElementSettings from './ElementSettings';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   paper: {
@@ -33,6 +35,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     paddingLeft: '10px',
     paddingRight: '10px',
+  },
+  formPreviewGrid: {
+    minWidth: '425px',
+    transition: theme.transitions.create(
+      'all',
+      {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      },
+    ),
   },
   draggingListItem: {
     background: theme.palette.primary.light,
@@ -81,7 +93,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const FormPreview = () => {
   const formElements = useSelector((state: RootState) => state.formReducer.formElements);
   const classes = useStyles();
+  const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
+
+  const handleChecked = () => {
+    setChecked((prev) => !prev);
+  };
 
   const deleteElementHandler = (index: number) => {
     const formElementsClone = formElements.slice();
@@ -90,57 +107,68 @@ const FormPreview = () => {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <Typography variant="h5" className={classes.title}>
-        Form Preview
-      </Typography>
-      <Divider />
-      <Droppable droppableId="FormPreview">
-        {(provided, snapshot) => (
-          <>
-            <List innerRef={provided.innerRef}>
-              {formElements.length ? formElements.map((formElement, index) => (
-                <Draggable key={formElement.id} draggableId={formElement.id} index={index}>
-                  {(dProvided, dSnapShot) => (
+    <>
+      <Grid item sm={checked ? 6 : 8} xs={12} className={classes.formPreviewGrid}>
+        <Paper className={classes.paper}>
+          <Typography variant="h5" className={classes.title}>
+            Form Preview
+          </Typography>
+          <Divider />
+          <Droppable droppableId="FormPreview">
+            {(provided, snapshot) => (
+              <>
+                <List innerRef={provided.innerRef}>
+                  {formElements.length ? formElements.map((formElement, index) => (
+                    <Draggable key={formElement.id} draggableId={formElement.id} index={index}>
+                      {(dProvided, dSnapShot) => (
+                        <div
+                          {...dProvided.dragHandleProps}
+                          {...dProvided.draggableProps}
+                          className={dSnapShot.isDragging
+                            ? classes.draggingListItem
+                            : classes.listItem}
+                          ref={dProvided.innerRef}
+                        >
+                          <div className={classes.questionIconContainer}>
+                            <IconButton
+                              className={classes.iconButton}
+                              onClick={handleChecked}
+                            >
+                              <SettingsIcon />
+                            </IconButton>
+                            <IconButton
+                              className={classes.iconButton}
+                              onClick={() => deleteElementHandler(index)}
+                            >
+                              <DeleteIcon className={classes.deleteIcon} />
+                            </IconButton>
+                          </div>
+                          <RenderPreview
+                            questionSettings={formElement}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  )) : (
                     <div
-                      {...dProvided.dragHandleProps}
-                      {...dProvided.draggableProps}
-                      className={dSnapShot.isDragging
-                        ? classes.draggingListItem
-                        : classes.listItem}
-                      ref={dProvided.innerRef}
+                      className={
+                      snapshot.isDraggingOver
+                        ? classes.placeholderDrag
+                        : classes.placeholder
+                    }
                     >
-                      <div className={classes.questionIconContainer}>
-                        <IconButton className={classes.iconButton}>
-                          <MoreVertIcon />
-                        </IconButton>
-                        <IconButton className={classes.iconButton} onClick={() => deleteElementHandler(index)}>
-                          <DeleteIcon className={classes.deleteIcon} />
-                        </IconButton>
-                      </div>
-                      <RenderPreview
-                        questionSettings={formElement}
-                      />
+                      {!snapshot.isDraggingOver && 'Drop Form Elements Here'}
                     </div>
                   )}
-                </Draggable>
-              )) : (
-                <div
-                  className={
-                  snapshot.isDraggingOver
-                    ? classes.placeholderDrag
-                    : classes.placeholder
-                }
-                >
-                  {!snapshot.isDraggingOver && 'Drop Form Elements Here'}
-                </div>
-              )}
-            </List>
-            {formElements.length ? provided.placeholder : null}
-          </>
-        )}
-      </Droppable>
-    </Paper>
+                </List>
+                {formElements.length ? provided.placeholder : null}
+              </>
+            )}
+          </Droppable>
+        </Paper>
+      </Grid>
+      <ElementSettings checked={checked} handleChecked={handleChecked} />
+    </>
   );
 };
 

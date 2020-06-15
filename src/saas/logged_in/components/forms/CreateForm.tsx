@@ -28,11 +28,7 @@ const useStyles = makeStyles(() => createStyles({
     width: '100%',
   },
   elementSelectorGrid: {
-    minWidth: '425px',
     maxWidth: '475px',
-  },
-  formPreviewGrid: {
-    minWidth: '425px',
   },
   stepper: {
     background: 'inherit',
@@ -213,12 +209,10 @@ const CreateForm = () => {
           </Box>
         </Grid>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Grid item xs={10} sm={6} className={classes.elementSelectorGrid}>
+          <Grid item xs={12} sm={3} className={classes.elementSelectorGrid}>
             <FormBuilder formElements={availableFormElements} />
           </Grid>
-          <Grid item xs={10} sm={8} className={classes.formPreviewGrid}>
-            <FormPreview />
-          </Grid>
+          <FormPreview />
         </DragDropContext>
       </Grid>
     </div>
