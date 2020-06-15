@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   createStyles,
@@ -94,15 +94,30 @@ const FormPreview = () => {
   const formElements = useSelector((state: RootState) => state.formReducer.formElements);
   const classes = useStyles();
   const [checked, setChecked] = useState(false);
+  const [selectedElement, setSelectedElement] = useState('');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (selectedElement === '' && formElements.length > 0) {
+      setSelectedElement(formElements[0].id);
+    } else if (formElements.length === 0) {
+      setSelectedElement('');
+    }
+  }, [formElements, selectedElement]);
 
   const handleChecked = () => {
     setChecked((prev) => !prev);
+    if (formElements.length > 0 && selectedElement === '') {
+      setSelectedElement(formElements[0].id);
+    }
   };
 
   const deleteElementHandler = (index: number) => {
     const formElementsClone = formElements.slice();
-    formElementsClone.splice(index, 1);
+    const deletedElement = formElementsClone.splice(index, 1);
+    if (selectedElement === deletedElement[0].id && formElementsClone.length > 0) {
+      setSelectedElement(formElementsClone[0].id);
+    }
     dispatch(setFormElements(formElementsClone));
   };
 
@@ -124,21 +139,31 @@ const FormPreview = () => {
                         <div
                           {...dProvided.dragHandleProps}
                           {...dProvided.draggableProps}
-                          className={dSnapShot.isDragging
-                            ? classes.draggingListItem
-                            : classes.listItem}
+                          className={
+                            (
+                              dSnapShot.isDragging
+                              || (checked && selectedElement === formElement.id)
+                            )
+                              ? classes.draggingListItem
+                              : classes.listItem
+                          }
+                          onClick={() => setSelectedElement(formElement.id)}
                           ref={dProvided.innerRef}
+                          role="presentation"
                         >
                           <div className={classes.questionIconContainer}>
                             <IconButton
                               className={classes.iconButton}
-                              onClick={handleChecked}
+                              onClick={() => setChecked(true)}
                             >
                               <SettingsIcon />
                             </IconButton>
                             <IconButton
                               className={classes.iconButton}
-                              onClick={() => deleteElementHandler(index)}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                deleteElementHandler(index);
+                              }}
                             >
                               <DeleteIcon className={classes.deleteIcon} />
                             </IconButton>
