@@ -5,22 +5,78 @@ import {
 } from '@reduxjs/toolkit';
 import { Epic } from 'redux-observable';
 import { filter, mergeMap } from 'rxjs/operators';
+import { v4 as uuid } from 'uuid';
 import apiClient from '../wrappers/api';
 
 export const titleTypes = ['body1', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'caption'];
-
+export const requiredQuestionTypes = ['Short Text', 'Long Text', 'Dropdown', 'Auto Complete', 'Multiple Choice'];
+export const multiAnswerQuestionTypes = ['Auto Complete', 'Checkboxes', 'Dropdown', 'Multiple Choice'];
 export interface FormElement {
   created?: string,
   id: string,
   label: string,
-  questionOptions?: {
+  questionOptions: {
     label: string,
+    id: string,
   }[],
   required: boolean,
   titleType?: 'body1' | 'caption' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
   type: string,
   updated?: string,
 }
+
+export const defaultFormElements = [
+  {
+    type: 'Title',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    titleType: 'h6',
+    questionOptions: [],
+  },
+  {
+    type: 'Short Text',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [],
+  },
+  {
+    type: 'Long Text',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [],
+  },
+  {
+    type: 'Dropdown',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
+  },
+  {
+    type: 'Auto Complete',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
+  },
+  {
+    type: 'Multiple Choice',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
+  },
+  {
+    type: 'Checkboxes',
+    id: uuid(),
+    required: false,
+    label: 'Question Title',
+    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
+  },
+] as FormElement[];
 
 export interface IForm {
   created: string,

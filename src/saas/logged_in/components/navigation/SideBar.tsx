@@ -8,9 +8,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   handleDrawerToggle: () => void,
@@ -31,94 +30,96 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   // necessary for content to be below app bar
-  toolbar: {...theme.mixins.toolbar, backgroundColor: theme.palette.background.default},
+  toolbar: { ...theme.mixins.toolbar, backgroundColor: theme.palette.background.default },
   drawerPaper: {
     width: theme.spacing(25),
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
   },
   selectedItem: {
-    backgroundColor: theme.palette.primary.light + " !important"
-  }
+    backgroundColor: `${theme.palette.primary.light} !important`,
+  },
 }));
 
-const SideBar = (props: IProps) =>  {
-  const classes = useStyles()
-  const theme = useTheme()
-  const history = useHistory()
+const SideBar = (props: IProps) => {
+  const classes = useStyles();
+  const theme = useTheme();
+  const history = useHistory();
   // Need so update state in order to re-render on location change
   // eslint-disable-next-line
   const [loc, setLoc] = useState<string>("");
 
   useEffect(() => history.listen(() => {
-    setLoc(history.location.pathname)
-  }), [history])
+    setLoc(history.location.pathname);
+  }), [history]);
 
-  const { handleDrawerToggle, mobileOpen } = props
+  const { handleDrawerToggle, mobileOpen } = props;
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
         <ListItem
-          button key={"Forms"}
+          button
+          key="Forms"
           component={Link}
           to="/c/forms"
-          selected={history.location.pathname==="/c/forms"}
+          selected={history.location.pathname === '/c/forms'}
           classes={{ selected: classes.selectedItem }}
         >
           <ListItemIcon><AssignmentIcon /></ListItemIcon>
-          <ListItemText primary={"Forms"} />
+          <ListItemText primary="Forms" />
         </ListItem>
-      <Divider />
+        <Divider />
         <ListItem
-          button key={"Reports"}
+          button
+          key="Reports"
           component={Link}
           to="/c/reports"
-          selected={history.location.pathname==="/c/reports"}
+          selected={history.location.pathname === '/c/reports'}
           classes={{ selected: classes.selectedItem }}
         >
           <ListItemIcon><BarChartIcon /></ListItemIcon>
-          <ListItemText primary={"Reports"} />
+          <ListItemText primary="Reports" />
         </ListItem>
       </List>
     </div>
   );
 
   return (
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        <Hidden smUp implementation="css">
-          <Drawer
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true,
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
+    <nav className={classes.drawer} aria-label="mailbox folders">
+      <Hidden smUp implementation="css">
+        <Drawer
+          variant="temporary"
+          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true,
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+      <Hidden mdDown implementation="css">
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant="permanent"
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+    </nav>
   );
-}
+};
 
 export default SideBar;

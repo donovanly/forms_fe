@@ -108,7 +108,13 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
     case 'Multiple Choice':
       return (
         <FormControl className={classes.formControl}>
-          <FormLabel style={{ fontSize: '12px' }}>{questionSettings.label}</FormLabel>
+          <FormLabel
+            error={questionSettings.required}
+            required={questionSettings.required}
+            style={{ fontSize: '12px' }}
+          >
+            {questionSettings.label}
+          </FormLabel>
           <RadioGroup defaultValue="Option 1">
             {questionSettings.questionOptions
             && questionSettings.questionOptions.map((option, index) => (
@@ -116,10 +122,11 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
                 control={<Radio size='small' />}
                 key={index}
                 label={option.label}
-                value={option.label}
               />
             ))}
           </RadioGroup>
+          {questionSettings.required
+          && <FormHelperText error>This field is required.</FormHelperText>}
         </FormControl>
       );
     case 'Checkboxes':

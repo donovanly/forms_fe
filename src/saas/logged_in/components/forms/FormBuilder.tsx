@@ -28,7 +28,7 @@ import {
 } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
-import { addElement, FormElement } from '../../../../state/ducks/form';
+import { addElement, defaultFormElements, FormElement } from '../../../../state/ducks/form';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   formControl: {
@@ -103,14 +103,14 @@ const getRenderItem = (formElements: FormElement[]) => (
   );
 };
 
-const FormBuilder = (props: {formElements: FormElement[]}) => {
+const FormBuilder = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { formElements } = props;
 
   const addElementHandler = (index: number) => {
-    const elementType = formElements[index];
-    dispatch(addElement({ ...elementType, id: uuid() }));
+    const elementType = defaultFormElements[index];
+    const questionOptions = elementType.questionOptions.map((val) => ({ ...val, id: uuid() }));
+    dispatch(addElement({ ...elementType, id: uuid(), questionOptions }));
   };
 
   return (
@@ -119,10 +119,10 @@ const FormBuilder = (props: {formElements: FormElement[]}) => {
         Form Elements
       </Typography>
       <Divider />
-      <Droppable droppableId="FormElements" isDropDisabled renderClone={getRenderItem(formElements)}>
+      <Droppable droppableId="FormElements" isDropDisabled renderClone={getRenderItem(defaultFormElements)}>
         {(provided, snapshot) => (
           <List innerRef={provided.innerRef}>
-            {formElements.map((element, index) => {
+            {defaultFormElements.map((element, index) => {
               const shouldRenderClone = element.id === snapshot.draggingFromThisWith;
               return (
                 <Fragment key={element.id}>

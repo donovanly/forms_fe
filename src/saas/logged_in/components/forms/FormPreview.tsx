@@ -192,7 +192,11 @@ const FormPreview = () => {
           </Droppable>
         </Paper>
       </Grid>
-      <ElementSettings checked={checked} handleChecked={handleChecked} />
+      <ElementSettings
+        checked={checked}
+        handleChecked={handleChecked}
+        selectedElement={selectedElement}
+      />
     </>
   );
 };

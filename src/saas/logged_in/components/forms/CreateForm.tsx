@@ -19,7 +19,7 @@ import { StepIconProps } from '@material-ui/core/StepIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import FormPreview from './FormPreview';
 import FormBuilder from './FormBuilder';
-import { FormElement, setFormElements } from '../../../../state/ducks/form';
+import { defaultFormElements, FormElement, setFormElements } from '../../../../state/ducks/form';
 import { RootState } from '../../../../state/root';
 
 const useStyles = makeStyles(() => createStyles({
@@ -84,55 +84,6 @@ const ColorlibStepIcon = (props: StepIconProps) => {
   );
 };
 
-const availableFormElements = [
-  {
-    type: 'Title',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-    titleType: 'h6',
-  },
-  {
-    type: 'Short Text',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-  },
-  {
-    type: 'Long Text',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-  },
-  {
-    type: 'Dropdown',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
-  },
-  {
-    type: 'Auto Complete',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
-  },
-  {
-    type: 'Multiple Choice',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
-  },
-  {
-    type: 'Checkboxes',
-    id: uuid(),
-    required: false,
-    label: 'Question Title',
-    questionOptions: [{ label: 'Option 1' }, { label: 'Option 2' }, { label: 'Option 3' }, { label: 'Option 4' }],
-  },
-] as FormElement[];
 
 const reorder = (source: FormElement[], startIndex: number, endIndex: number) => {
   const sourceClone = source.slice();
@@ -142,15 +93,16 @@ const reorder = (source: FormElement[], startIndex: number, endIndex: number) =>
 };
 
 const copy = (
-  source: FormElement[],
   destination: FormElement[],
   droppableSource: DraggableLocation,
   droppableDestination: DraggableLocation,
 ) => {
-  const elementType = source[droppableSource.index];
+  const elementType = defaultFormElements[droppableSource.index];
   const destinationClone = destination.slice();
-
-  destinationClone.splice(droppableDestination.index, 0, { ...elementType, id: uuid() });
+  const questionOptions = elementType.questionOptions.map((val) => ({ ...val, id: uuid() }));
+  destinationClone.splice(
+    droppableDestination.index, 0, { ...elementType, id: uuid(), questionOptions },
+  );
   return destinationClone;
 };
 
@@ -176,7 +128,7 @@ const CreateForm = () => {
         dispatch(setFormElements(reorder(formElements, source.index, destination.index)));
         break;
       case 'FormElements':
-        dispatch(setFormElements(copy(availableFormElements, formElements, source, destination)));
+        dispatch(setFormElements(copy(formElements, source, destination)));
         break;
       default:
         break;
@@ -210,7 +162,7 @@ const CreateForm = () => {
         </Grid>
         <DragDropContext onDragEnd={onDragEnd}>
           <Grid item xs={12} sm={3} className={classes.elementSelectorGrid}>
-            <FormBuilder formElements={availableFormElements} />
+            <FormBuilder />
           </Grid>
           <FormPreview />
         </DragDropContext>
