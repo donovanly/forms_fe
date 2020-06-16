@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import {
   Box,
   createStyles,
@@ -84,7 +84,6 @@ const ColorlibStepIcon = (props: StepIconProps) => {
   );
 };
 
-
 const reorder = (source: FormElement[], startIndex: number, endIndex: number) => {
   const sourceClone = source.slice();
   const [removed] = sourceClone.splice(startIndex, 1);
@@ -106,13 +105,45 @@ const copy = (
   return destinationClone;
 };
 
+interface StepperProps {
+  step: number,
+  handleStep: (step: number) => void,
+}
+
+const MemoStepperComponent = memo((props: StepperProps) => {
+  const { step, handleStep } = props;
+  const classes = useStyles();
+  return (
+    <Grid item xs={12} justify="center" style={{ maxWidth: '100%' }}>
+      <Box display="flex" justifyContent="center">
+        <Stepper activeStep={step} nonLinear className={classes.stepper}>
+          <Step>
+            <StepLabel StepIconComponent={ColorlibStepIcon} onClick={() => handleStep(0)}>
+              Edit Form
+            </StepLabel>
+          </Step>
+          <Step>
+            <StepLabel StepIconComponent={ColorlibStepIcon} onClick={() => handleStep(1)}>
+              Settings
+            </StepLabel>
+          </Step>
+          <Step>
+            <StepLabel StepIconComponent={ColorlibStepIcon} onClick={() => handleStep(2)}>
+              Publish
+            </StepLabel>
+          </Step>
+        </Stepper>
+      </Box>
+    </Grid>
+)});
+
 const CreateForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const formElements = useSelector((state: RootState) => state.formReducer.formElements);
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const handleStep = (step: number) => () => {
+  const handleStep = (step: number) => {
     setActiveStep(step);
   };
 
@@ -139,27 +170,7 @@ const CreateForm = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} justify="center">
-        <Grid item xs={12} justify="center" style={{ maxWidth: '100%' }}>
-          <Box display="flex" justifyContent="center">
-            <Stepper activeStep={activeStep} nonLinear className={classes.stepper}>
-              <Step>
-                <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(0)}>
-                  Edit Form
-                </StepLabel>
-              </Step>
-              <Step>
-                <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(1)}>
-                  Settings
-                </StepLabel>
-              </Step>
-              <Step>
-                <StepLabel StepIconComponent={ColorlibStepIcon} onClick={handleStep(2)}>
-                  Publish
-                </StepLabel>
-              </Step>
-            </Stepper>
-          </Box>
-        </Grid>
+        <MemoStepperComponent step={activeStep} handleStep={handleStep} />
         <DragDropContext onDragEnd={onDragEnd}>
           <Grid item xs={12} sm={3} className={classes.elementSelectorGrid}>
             <FormBuilder />

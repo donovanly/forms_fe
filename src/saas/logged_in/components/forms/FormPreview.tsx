@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
+import React, { memo, useCallback, useState, useEffect } from 'react';
 
 import {
   createStyles,
@@ -18,7 +18,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import RenderPreview from './RenderPreview';
 import { RootState } from '../../../../state/root';
-import { setFormElements } from '../../../../state/ducks/form';
+import { deleteElement, FormElement } from '../../../../state/ducks/form';
 import ElementSettings from './ElementSettings';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -90,6 +90,72 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
+interface FormPreviewRowProps {
+  checked: boolean,
+  deleteElementHandler: (id: string) => void,
+  formElement: FormElement,
+  index: number,
+  selectedElement: string,
+  setChecked: (checked: boolean) => void,
+  setSelectedElement: (formElementId: string) => void,
+}
+
+const MemoFormPreviewRow = memo((props: FormPreviewRowProps) => {
+  const classes = useStyles();
+  const {
+    checked,
+    deleteElementHandler,
+    formElement,
+    index,
+    selectedElement,
+    setChecked,
+    setSelectedElement,
+  } = props;
+
+  return (
+    <Draggable key={formElement.id} draggableId={formElement.id} index={index}>
+      {(provided, snapshot) => (
+        <div
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+          className={
+          (
+            snapshot.isDragging
+            || (checked && selectedElement === formElement.id)
+          )
+            ? classes.draggingListItem
+            : classes.listItem
+        }
+          onClick={() => setSelectedElement(formElement.id)}
+          ref={provided.innerRef}
+          role="presentation"
+        >
+          <div className={classes.questionIconContainer}>
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => setChecked(true)}
+            >
+              <SettingsIcon />
+            </IconButton>
+            <IconButton
+              className={classes.iconButton}
+              onClick={(event) => {
+                event.stopPropagation();
+                deleteElementHandler(formElement.id);
+              }}
+            >
+              <DeleteIcon className={classes.deleteIcon} />
+            </IconButton>
+          </div>
+          <RenderPreview
+            questionSettings={formElement}
+          />
+        </div>
+      )}
+    </Draggable>
+  );
+});
+
 const FormPreview = () => {
   const formElements = useSelector((state: RootState) => state.formReducer.formElements);
   const classes = useStyles();
@@ -112,14 +178,9 @@ const FormPreview = () => {
     }
   };
 
-  const deleteElementHandler = (index: number) => {
-    const formElementsClone = formElements.slice();
-    const deletedElement = formElementsClone.splice(index, 1);
-    if (selectedElement === deletedElement[0].id && formElementsClone.length > 0) {
-      setSelectedElement(formElementsClone[0].id);
-    }
-    dispatch(setFormElements(formElementsClone));
-  };
+  const deleteElementHandler = useCallback((id: string) => {
+    dispatch(deleteElement(id));
+  }, [dispatch]);
 
   return (
     <>
@@ -134,46 +195,16 @@ const FormPreview = () => {
               <>
                 <List innerRef={provided.innerRef}>
                   {formElements.length ? formElements.map((formElement, index) => (
-                    <Draggable key={formElement.id} draggableId={formElement.id} index={index}>
-                      {(dProvided, dSnapShot) => (
-                        <div
-                          {...dProvided.dragHandleProps}
-                          {...dProvided.draggableProps}
-                          className={
-                            (
-                              dSnapShot.isDragging
-                              || (checked && selectedElement === formElement.id)
-                            )
-                              ? classes.draggingListItem
-                              : classes.listItem
-                          }
-                          onClick={() => setSelectedElement(formElement.id)}
-                          ref={dProvided.innerRef}
-                          role="presentation"
-                        >
-                          <div className={classes.questionIconContainer}>
-                            <IconButton
-                              className={classes.iconButton}
-                              onClick={() => setChecked(true)}
-                            >
-                              <SettingsIcon />
-                            </IconButton>
-                            <IconButton
-                              className={classes.iconButton}
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                deleteElementHandler(index);
-                              }}
-                            >
-                              <DeleteIcon className={classes.deleteIcon} />
-                            </IconButton>
-                          </div>
-                          <RenderPreview
-                            questionSettings={formElement}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
+                    <MemoFormPreviewRow
+                      checked={checked}
+                      deleteElementHandler={deleteElementHandler}
+                      formElement={formElement}
+                      index={index}
+                      key={formElement.id}
+                      selectedElement={selectedElement}
+                      setChecked={setChecked}
+                      setSelectedElement={setSelectedElement}
+                    />
                   )) : (
                     <div
                       className={

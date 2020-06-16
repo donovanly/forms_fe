@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   createStyles,
   Divider,
   FormControl,
@@ -14,8 +13,10 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../state/root';
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   paper: {
     padding: '10px',
-    minWidth: '250px',
+    minWidth: '347.5px',
   },
   title: {
     marginBottom: theme.spacing(1),
@@ -72,6 +73,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   formControl: {
     marginBottom: '10px',
     marginTop: '10px',
+  },
+  addOptionButton: {
+    margin: '15px 0px 10px 10px',
+  },
+  deleteOptionButton: {
+    margin: '15px 10px 10px 10px',
+  },
+  dynamicQuestionTF:  {
+    width: '230px',
   },
 }));
 
@@ -142,50 +152,41 @@ const ElementSettings = (props: IProps) => {
               )}
               {multiAnswerQuestionTypes.includes(formElements[formIndex].type)
                 && formElements[formIndex].questionOptions.map((item, index) => (
-                  <div key={index}>
+                  <div key={item.id}>
                     <TextField
                       InputLabelProps={{
                         required: true,
                         shrink: true,
                       }}
+                      className={classes.dynamicQuestionTF}
                       label={`Option Label ${index + 1}`}
+                      onChange={(event) => updateElement({
+                        ...formElements[formIndex],
+                        questionOptions: [
+                          ...formElements[formIndex].questionOptions.slice(0, index),
+                          {
+                            label: event.target.value,
+                            id: formElements[formIndex].questionOptions[index].id,
+                          },
+                          ...formElements[formIndex].questionOptions.slice(index + 1),
+                        ],
+                      })}
                       size="small"
+                      value={item.label}
                     />
                     {index === formElements[formIndex].questionOptions.length - 1 ? (
                       <>
-                        <Button
-                        // className={classes.deleteOptinosButton}
-                          color="secondary"
-                          disabled={formElements[formIndex].questionOptions.length === 1}
-                        // onClick={() => remove(index)}
-                          size="small"
-                          type="button"
-                          variant="outlined"
-                        >
-                          Delete
-                        </Button>
-                        <Button
-                        // className={classes.addOptionsButton}
-                          color="primary"
-                        // onClick={() => append({ name: `Option ${index + 2}` })}
-                          size="small"
-                          type="button"
-                          variant="outlined"
-                        >
-                          Add
-                        </Button>
+                        <IconButton>
+                          <RemoveCircleOutlineOutlinedIcon color="secondary" />
+                        </IconButton>
+                        <IconButton>
+                          <AddBoxOutlinedIcon color="primary" />
+                        </IconButton>
                       </>
                     ) : (
-                      <Button
-                      // className={classes.deleteOptinosButton}
-                        color="secondary"
-                      // onClick={() => remove(index)}
-                        size="small"
-                        type="button"
-                        variant="outlined"
-                      >
-                        Delete
-                      </Button>
+                      <IconButton>
+                        <RemoveCircleOutlineOutlinedIcon color="secondary" />
+                      </IconButton>
                     )}
                   </div>
                 ))}

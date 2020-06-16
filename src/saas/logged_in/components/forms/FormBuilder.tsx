@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { Fragment } from 'react';
+import React, { memo, Fragment } from 'react';
 import {
   createStyles,
   makeStyles,
@@ -167,4 +167,4 @@ const FormBuilder = () => {
   );
 };
 
-export default FormBuilder;
+export default memo(FormBuilder);

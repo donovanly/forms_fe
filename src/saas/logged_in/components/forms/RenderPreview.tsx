@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import {
   Box,
@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-export default function RenderPreview(props: {questionSettings: FormElement}) {
+const RenderPreview = (props: {questionSettings: FormElement}) => {
   const { questionSettings } = props;
   const classes = useStyles();
 
@@ -179,4 +179,6 @@ export default function RenderPreview(props: {questionSettings: FormElement}) {
     default:
       return <div>None</div>;
   }
-}
+};
+
+export default memo(RenderPreview);
